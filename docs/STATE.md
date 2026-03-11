@@ -27,7 +27,11 @@ On considère donc que le projet démarre officiellement avec la mise en place d
 
 ## Dernière tâche terminée
 
+<<<<<<< copilot/dep-0006-choisir-slogan-principal
 - DEP-0006 — Slogan principal choisi : **Commander simplement. Livrer clairement.**
+=======
+- DEP-0005 — Nom commercial choisi : **DépannVite**
+>>>>>>> main
 
 ## En cours
 
