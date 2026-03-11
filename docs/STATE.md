@@ -7,6 +7,7 @@
 - `.github/copilot-instructions.md` : créé
 - Code produit : pas commencé
 - Système de suivi à trois : en place
+- Problème principal client formulé : commande lente et incertaine (infos répétées, disponibilité inconnue)
 
 ## Bloc actif recommandé
 
@@ -26,7 +27,7 @@ Les premières décisions de base (DEP-0001 à DEP-0007) sont documentées et co
 
 ## Dernière tâche terminée
 
-- DEP-0007 — Profils principaux définis : client, dépanneur, livreur, super administrateur.
+- DEP-0008 — Problème principal côté client formulé : commande lente et incertaine, infos répétées pour confirmer.
 
 ## En cours
 

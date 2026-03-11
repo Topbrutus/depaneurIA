@@ -38,6 +38,9 @@ C'est le nom commercial officiel du produit SaaS destiné aux dépanneurs. Il es
 - **Dépanneur** : configure le catalogue de sa boutique, reçoit et valide les commandes, prépare les articles et remet la commande prête au client ou au livreur.
 - **Livreur** : prend en charge une commande préparée, la transporte jusqu’au client, confirme la remise et l’encaissement à la livraison quand attendu.
 - **Super administrateur** : paramètre et supervise les dépanneurs et livreurs, contrôle les accès et règles transverses, veille à la cohérence et à la qualité du service.
+## Problème principal côté client
+
+> Aujourd’hui, commander au dépanneur oblige le client à décrire sa demande par morceaux (appels, messages, allers-retours) sans savoir si les produits sont disponibles ni quand ils arriveront. Il perd du temps à répéter adresse et liste d’articles pour obtenir une confirmation, surtout quand il est pressé ou mal à l’aise avec les interfaces actuelles.
 
 ## Fichiers à lire en premier
 
