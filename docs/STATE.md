@@ -27,7 +27,7 @@ On considère donc que le projet démarre officiellement avec la mise en place d
 
 ## Dernière tâche terminée
 
-- DEP-0002 — Promesse client définie : « Commander vite, clairement et simplement, avec paiement à la livraison. »
+- DEP-0003 — Promesse dépanneur définie : « Recevoir, traiter et livrer des commandes simplement, sans compliquer les opérations du dépanneur. »
 
 ## En cours
 
