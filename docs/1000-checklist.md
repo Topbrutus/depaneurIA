@@ -12,7 +12,7 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 
 - [x] DEP-0001 Définir en une phrase la mission du produit : permettre à un client de commander un dépanneur en mode manuel, assisté ou téléphonique.
 - [x] DEP-0002 Définir en une phrase la promesse client : commander vite, clairement et sans paiement en ligne.
-- [ ] DEP-0003 Définir en une phrase la promesse dépanneur : recevoir, traiter et livrer des commandes simplement.
+- [x] DEP-0003 Définir en une phrase la promesse dépanneur : recevoir, traiter et livrer des commandes simplement.
 - [ ] DEP-0004 Choisir le nom de travail interne du projet.
 - [ ] DEP-0005 Choisir le nom commercial du produit SaaS destiné aux dépanneurs.
 - [ ] DEP-0006 Choisir le slogan principal du produit.
