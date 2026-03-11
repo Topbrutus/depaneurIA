@@ -32,6 +32,13 @@ C'est le nom commercial officiel du produit SaaS destiné aux dépanneurs. Il es
 
 > Commander simplement. Livrer clairement.
 
+## Profils principaux (V1)
+
+- **Client** : passe commande en mode manuel, assisté écran ou téléphone, fournit les infos de contact et paie à la livraison, suit le statut jusqu’à la remise.
+- **Dépanneur** : configure le catalogue de sa boutique, reçoit et valide les commandes, prépare les articles et remet la commande prête au client ou au livreur.
+- **Livreur** : prend en charge une commande préparée, la transporte jusqu’au client, confirme la remise et l’encaissement à la livraison quand attendu.
+- **Super administrateur** : paramètre et supervise les dépanneurs et livreurs, contrôle les accès et règles transverses, veille à la cohérence et à la qualité du service.
+
 ## Fichiers à lire en premier
 
 - `docs/1000-checklist.md` — la checklist complète des 1000 tâches

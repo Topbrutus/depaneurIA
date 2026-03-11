@@ -15,8 +15,7 @@
 
 ## Observation importante
 
-Le dépôt existe déjà, mais la checklist n'a pas encore été cochée dans le dépôt.
-On considère donc que le projet démarre officiellement avec la mise en place de cette base documentaire et GitHub.
+Les premières décisions de base (DEP-0001 à DEP-0007) sont documentées et cochées. Le dépôt reste centré sur la documentation initiale avant de passer aux blocs GitHub.
 
 ## Prochaines actions suggérées
 
@@ -27,11 +26,7 @@ On considère donc que le projet démarre officiellement avec la mise en place d
 
 ## Dernière tâche terminée
 
-<<<<<<< copilot/dep-0006-choisir-slogan-principal
-- DEP-0006 — Slogan principal choisi : **Commander simplement. Livrer clairement.**
-=======
-- DEP-0005 — Nom commercial choisi : **DépannVite**
->>>>>>> main
+- DEP-0007 — Profils principaux définis : client, dépanneur, livreur, super administrateur.
 
 ## En cours
 
