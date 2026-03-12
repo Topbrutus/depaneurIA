@@ -107,6 +107,21 @@ C'est le nom commercial officiel du produit SaaS destiné aux dépanneurs. Il es
 - Paiement à la livraison encaissé et confirmé quand attendu.
 - Confirmation de remise visible côté client et dépanneur (et livreur si concerné).
 
+### Cas de friction V1
+
+- **Commande refusée (état final)** : la demande est clôturée avec un statut `refusée` et un motif explicite (hors zone, suspicion de fraude, article critique absent) visible par le client et le dépanneur. Aucune préparation ni encaissement ne sont effectués ; le client reçoit un message clair de clôture et peut relancer une nouvelle commande s’il le souhaite.
+- **Produit indisponible** : le dépanneur propose un remplacement simple (article de même catégorie ou prix proche) ou la suppression de l’article. Si l’article est clé pour la commande, une annulation partielle ou totale est possible. Le client valide le choix avant préparation ; le récapitulatif est mis à jour (contenu, montant estimé, heure prévue) avant de poursuivre ou de clôturer.
+- **Adresse hors zone** : dès la saisie de l’adresse, l’interface signale que la zone n’est pas couverte, bloque le flux normal et propose trois choix : corriger l’adresse, passer en retrait boutique si disponible, ou refuser proprement la commande avec message.
+- **Client non inscrit** : la commande est acceptée avec un dossier minimal (nom, téléphone vérifié, adresse). Un code rapide ou un appel peut confirmer le contact. Aucun compte complexe n’est requis en V1 ; les informations sont simplement mémorisées pour le suivi et réutilisées lors d’une nouvelle commande.
+
+### Expérience idéale sur ordinateur (V1)
+
+- Accueil clair présentant la promesse V1 et un double accès immédiat : commander en ligne (parcours assisté écran) ou appeler pour un parcours téléphone.
+- Parcours guidé en étapes visibles : 1) articles et quantités, 2) coordonnées (nom, téléphone, adresse, consignes), 3) choix enlèvement ou livraison, 4) vérification et envoi.
+- Récapitulatif latéral en temps réel : contenu de commande, mode de remise, paiement à la livraison, montant estimé ou « à confirmer », et heure/créneau estimatif quand fourni par le dépanneur.
+- Confirmation explicite à l’envoi : état « commande reçue », rappel du paiement à la livraison, et bouton de contact dépanneur.
+- Suivi simple post-envoi : timeline des états V1 (Reçue, Confirmée, En préparation, En route/Prête, Remise, Refusée/Annulée) avec messages clairs en cas d’indisponibilité ou de refus.
+
 ## Fichiers à lire en premier
 
 - `docs/1000-checklist.md` — la checklist complète des 1000 tâches
