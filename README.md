@@ -122,6 +122,48 @@ C'est le nom commercial officiel du produit SaaS destiné aux dépanneurs. Il es
 - Confirmation explicite à l’envoi : état « commande reçue », rappel du paiement à la livraison, et bouton de contact dépanneur.
 - Suivi simple post-envoi : timeline des états V1 (Reçue, Confirmée, En préparation, En route/Prête, Remise, Refusée/Annulée) avec messages clairs en cas d’indisponibilité ou de refus.
 
+### Expérience idéale sur téléphone (V1)
+
+- Accueil mobile ultra lisible : deux entrées immédiates « Commander en ligne » et « Appeler », avec rappel du paiement à la livraison.
+- Parcours en 4 écrans courts : articles/quantités, coordonnées (nom, téléphone, adresse, consignes), choix enlèvement ou livraison, puis vérification et envoi.
+- Saisie guidée adaptée au tactile : gros boutons, claviers dédiés (numérique pour téléphone, adresse avec suggestions simples), retour arrière clair.
+- Récapitulatif compact accessible en un tap : liste d’articles, mode de remise, paiement à la livraison, montant estimé ou mention « à confirmer ».
+- Confirmation finale lisible : état « commande reçue », rappel des prochaines étapes, lien direct pour contacter le dépanneur ou corriger la commande rapidement.
+- Suivi mobile réduit au nécessaire : timeline des états V1 avec messages courts et CTA pour appeler en cas de blocage.
+
+### Expérience idéale au téléphone vocal (V1)
+
+- Appel unique : l’assistant se présente, confirme le dépanneur et indique le paiement à la livraison.
+- Collecte guidée des articles un par un (nom puis quantité), avec reformulation courte et option de correction immédiate (« oui/non », répéter, enlever un article).
+- Capture des coordonnées dans la foulée : nom, numéro de rappel, adresse, consignes d’accès, puis choix enlèvement ou livraison.
+- Gestion des frictions de base : si adresse hors zone ou article critique absent, l’assistant propose corriger l’adresse, passer en retrait ou retirer/remplacer l’article avant de continuer.
+- Récapitulatif vocal final : articles et quantités, mode de remise, paiement à la livraison, montant estimé ou mention « à confirmer », créneau indicatif si fourni par le dépanneur.
+- Clôture explicite : annonce de l’état « commande reçue » et envoi d’un SMS/récap court pour assurer le suivi.
+
+### Bénéfices vendeurs pour les dépanneurs (V1)
+
+- Commandes reçues complètes du premier coup (articles, quantités, coordonnées, consignes, mention paiement à la livraison).
+- Moins d’allers-retours téléphoniques : le client corrige ou complète pendant le parcours assisté mobile ou vocal.
+- Fil d’états simple (Reçue, Confirmée, En préparation, En route/Prête, Remise, Refusée/Annulée) pour informer sans rédiger de longs messages.
+- Remplacements ou retraits d’articles gérés avant préparation, ce qui réduit les pertes de temps et évite les paniers à moitié exploitables.
+- Plus de commandes captées : les clients pressés ou peu à l’aise avec le web peuvent quand même commander via l’appel vocal guidé.
+
+### Bénéfices finaux pour les consommateurs (V1)
+
+- Commande rapide et guidée en quelques étapes sur mobile ou en appel, sans création de compte complexe ni paiement en ligne.
+- Moins d’incertitude : récap clair, état « commande reçue », suivi des étapes et rappel du paiement à la livraison.
+- Accessibilité accrue : gros contrôles tactiles, claviers adaptés et alternative vocale pour les personnes pressées ou à mobilité limitée.
+- Reprises simples en cas de friction : adresse hors zone ou article indisponible traités immédiatement avec des choix simples.
+- Rassurance côté livraison : indication du mode (enlèvement ou livraison), du montant à payer à la remise et d’un créneau indicatif quand fourni.
+
+### Rôle de l’assistant dans le site (V1)
+
+- Guider la saisie de commande : articles et quantités, coordonnées, consignes, choix enlèvement ou livraison, rappel du paiement à la livraison.
+- Vérifier et reformuler avant envoi : récapitulatif clair, demande de confirmation, indication du statut « commande reçue » une fois envoyée.
+- Aider sur les frictions V1 : signaler hors zone, proposer correction d’adresse ou passage en retrait, gérer l’indisponibilité d’un article par remplacement ou retrait.
+- Transmettre au dépanneur et relayer l’état : mettre à jour la timeline V1 visible par le client et montrer les étapes en attente de confirmation du dépanneur.
+- Faciliter le contact : proposer les CTA pertinents (appeler, corriger, ajouter une consigne) quand une clarification humaine est nécessaire.
+
 ## Fichiers à lire en premier
 
 - `docs/1000-checklist.md` — la checklist complète des 1000 tâches
