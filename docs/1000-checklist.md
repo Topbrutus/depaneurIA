@@ -99,10 +99,10 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [ ] DEP-0081 Créer l’organisation GitHub du projet.
 - [ ] DEP-0082 Choisir le nom du dépôt principal GitHub.
 - [ ] DEP-0083 Créer le dépôt principal GitHub.
-- [ ] DEP-0084 Créer un fichier README initial.
-- [ ] DEP-0085 Créer un fichier LICENSE initial.
+- [x] DEP-0084 Créer un fichier README initial.
+- [x] DEP-0085 Créer un fichier LICENSE initial.
 - [x] DEP-0086 Créer un fichier .gitignore adapté au projet.
-- [ ] DEP-0087 Créer un dossier docs dans le dépôt.
+- [x] DEP-0087 Créer un dossier docs dans le dépôt.
 - [x] DEP-0088 Créer un dossier apps dans le dépôt.
 - [x] DEP-0089 Créer un dossier packages dans le dépôt.
 - [x] DEP-0090 Créer un dossier infra dans le dépôt.
@@ -111,7 +111,7 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [x] DEP-0093 Créer un dossier decisions pour les décisions techniques.
 - [x] DEP-0094 Créer un dossier diagrams pour les schémas.
 - [x] DEP-0095 Créer un dossier prompts pour les consignes d’assistant.
-- [ ] DEP-0096 Créer un fichier CONTRIBUTING.md.
+- [x] DEP-0096 Créer un fichier CONTRIBUTING.md.
 - [x] DEP-0097 Créer un fichier CODEOWNERS.
 - [x] DEP-0098 Créer un modèle d’issue GitHub pour les bugs.
 - [x] DEP-0099 Créer un modèle d’issue GitHub pour les tâches.

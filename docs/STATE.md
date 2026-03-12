@@ -11,22 +11,22 @@
 
 ## Bloc actif recommandé
 
-- Bloc GitHub de fondation
-- Priorité pratique : `DEP-0102` à `DEP-0110`
+- Bloc GitHub de fondation : presque terminé (rattrapage complété)
+- Prochain bloc recommandé : `DEP-0102` à `DEP-0120`
 
 ## Observation importante
 
-Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Les blocs BLOCK-009 et BLOCK-010 sont partiellement complétés : DEP-0086 à DEP-0095 et DEP-0097 à DEP-0101 sont terminés. Les dossiers de structure (apps, packages, infra, scripts, assets, docs/decisions, docs/diagrams, docs/prompts), le fichier .gitignore, CODEOWNERS, les modèles d'issue GitHub et le modèle de PR sont en place.
+Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0101) est presque terminé : README, LICENSE, .gitignore, dossier docs, CONTRIBUTING.md, CODEOWNERS, dossiers decisions/diagrams/prompts, modèles d'issue GitHub (bug, task, idée produit) et modèle de PR sont tous en place. Les dossiers de structure (apps, packages, infra, scripts, assets) sont également présents.
 
 ## Prochaines actions suggérées
 
-1. Compléter DEP-0102 à DEP-0110 (branches, protection, CI)
-2. Cocher les tâches réellement terminées
+1. Démarrer le bloc DEP-0102 à DEP-0120 (branches, protection, CI, labels, Projects)
+2. Cocher les tâches réellement terminées à chaque livraison
 3. Mettre à jour cet état à chaque bloc terminé
 
 ## Dernière tâche terminée
 
-- DEP-0101 — Modèle de pull request GitHub créé (`.github/pull_request_template.md`)
+- DEP-0096 — Fichier CONTRIBUTING.md coché ; DEP-0084, DEP-0085, DEP-0087 également cochés
 
 ## En cours
 
