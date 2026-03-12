@@ -50,9 +50,22 @@ C'est le nom commercial officiel du produit SaaS destiné aux dépanneurs. Il es
 
 > Aujourd’hui, le dépanneur reçoit des commandes incomplètes par appels ou messages, doit rappeler pour récupérer l’adresse, vérifier la disponibilité et convenir du paiement à la livraison. Il jongle entre préparation et livraison sans interface simple, perd du temps à coordonner et risque erreurs ou ventes perdues juste pour finaliser une commande de base.
 
+## Solution principale côté dépanneur
+
+> En V1, DépannVite centralise les commandes complètes (articles, quantités, adresse, contact, paiement à la livraison) pour que le dépanneur confirme la disponibilité, prépare et remet facilement au client ou au livreur, sans appels répétés ni gestion de paiement en ligne.
+
 ## Problème principal côté livreur
 
 > Aujourd’hui, le livreur part avec des consignes partielles : adresse ou accès mal confirmés, paiement à récupérer flou, absence d’heure précise. Il passe des appels pour valider la remise, attend sur place ou fait des détours inutiles, ce qui rallonge la course et fait rater des livraisons pourtant prêtes.
+
+## Solution principale côté livreur
+
+> En V1, DépannVite fournit au livreur une fiche claire (adresse validée, consignes d’accès, montant à encaisser si prévu), la commande déjà préparée et un parcours de remise simple pour confirmer livraison et paiement sans ambiguïté ni détours.
+
+## Règles de paiement (V1)
+
+- Paiement de base : le paiement standard se fait à la livraison, directement au dépanneur ou au livreur mandaté, sans prépaiement en ligne.
+- Affichage des prix : tant que le paiement se fait à la livraison en V1, aucun affichage public obligatoire des prix n’est exigé ; le dépanneur peut communiquer les montants lors de la confirmation ou au moment de la remise.
 
 ## Fichiers à lire en premier
 
