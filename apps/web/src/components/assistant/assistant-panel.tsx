@@ -1,0 +1,122 @@
+'use client';
+
+import type { AssistantMessage } from '@depaneuria/types';
+import { useEffect, useRef, useState } from 'react';
+
+import { processMessage } from '../../lib/assistant-adapter';
+import { AssistantInput } from './assistant-input';
+import { AssistantMessageBubble } from './assistant-message';
+
+const WELCOME: AssistantMessage = {
+  id: 'welcome',
+  role: 'assistant',
+  text: '👋 Bonjour ! Dites-moi ce que vous voulez — par exemple "je veux du lait", "mets 2 coke" ou "je veux des chips ketchup".',
+  timestamp: 0,
+};
+
+export function AssistantPanel() {
+  const [messages, setMessages] = useState<AssistantMessage[]>([WELCOME]);
+  const [isLoading, setIsLoading] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = (text: string) => {
+    const userMsg: AssistantMessage = {
+      id: `u-${Date.now().toString()}`,
+      role: 'user',
+      text,
+      timestamp: Date.now(),
+    };
+
+    setMessages((prev) => [...prev, userMsg]);
+    setIsLoading(true);
+
+    // Léger délai pour un rendu naturel (moteur synchrone, mais UX préférable)
+    setTimeout(() => {
+      const response = processMessage(text);
+      const assistantMsg: AssistantMessage = {
+        id: `a-${Date.now().toString()}`,
+        role: 'assistant',
+        text: response.text,
+        timestamp: Date.now(),
+      };
+      setMessages((prev) => [...prev, assistantMsg]);
+      setIsLoading(false);
+    }, 250);
+  };
+
+  return (
+    <section
+      aria-label="Assistant de commande"
+      style={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '12px',
+        background: '#fff',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '500px',
+        overflow: 'hidden',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
+      }}
+    >
+      {/* En-tête */}
+      <div
+        style={{
+          padding: '0.9rem 1.2rem',
+          background: '#1a1a2e',
+          color: '#fff',
+          borderRadius: '12px 12px 0 0',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+        }}
+      >
+        <span style={{ fontSize: '1.1rem' }}>🤖</span>
+        <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>
+          Assistant depaneurIA
+        </span>
+      </div>
+
+      {/* Liste de messages */}
+      <div
+        role="log"
+        aria-live="polite"
+        aria-label="Historique de la conversation"
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          padding: '1rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.75rem',
+        }}
+      >
+        {messages.map((msg) => (
+          <AssistantMessageBubble key={msg.id} message={msg} />
+        ))}
+
+        {isLoading && (
+          <div
+            aria-label="L'assistant est en train de répondre"
+            style={{
+              color: '#aaa',
+              fontSize: '0.82rem',
+              fontStyle: 'italic',
+              paddingLeft: '0.25rem',
+            }}
+          >
+            En train de répondre…
+          </div>
+        )}
+
+        <div ref={bottomRef} />
+      </div>
+
+      {/* Zone de saisie */}
+      <AssistantInput onSend={handleSend} disabled={isLoading} />
+    </section>
+  );
+}
