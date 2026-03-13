@@ -404,7 +404,7 @@ Garantir que le contenu du panier est conservé lorsque le client recharge la pa
 
 1. **Sauvegarde locale** :
    - Clé : `depaneurIA_cart` (localStorage)
-   - Format : JSON `{ items: [{ productId, quantity, addedAt }], updatedAt: timestamp }`
+   - Format : JSON `{ items: [{ productId, variantId, quantity, unitPrice, currency, addedAt }], updatedAt: timestamp }` (permet de reconstruire les totaux sans requête réseau)
    - Mise à jour : à chaque modification du panier (ajout, retrait, modification quantité)
 
 2. **Synchronisation serveur** (client connecté) :
@@ -512,6 +512,7 @@ Garantir que le contenu du panier n'est pas perdu en cas de perte temporaire de 
 2. **Mode offline** :
    - Affichage d'un indicateur visuel : bannière « Connexion perdue. Modifications sauvegardées en local. »
    - Toutes les modifications du panier sont enregistrées en localStorage
+   - File d'attente des opérations : chaque action (ajout, retrait, modification) est horodatée et rejouée dans l'ordre à la reconnexion
    - Désactivation des actions nécessitant le serveur (confirmation panier, validation stock)
 
 3. **Retour connexion** :
@@ -561,6 +562,7 @@ Définir le comportement de l'application lorsque le client a confirmé son pani
 | Panier               | Non modifiable, lecture seule                                 |
 | Bouton retour        | Désactivé (impossible de revenir en arrière)                  |
 | Durée attendue       | 5 à 15 secondes (paramétrable)                                |
+| Persistance          | État `pending` conservé localement pour éviter tout double envoi après rechargement |
 | Timeout              | Si > 30 secondes, affichage message d'erreur (voir `failed`)  |
 
 #### État `validated` (commande validée)
@@ -670,6 +672,17 @@ Si l'une de ces vérifications échoue, affichage d'un message d'erreur et désa
 
 ---
 
+## Critères de validation (DEP-0334 à DEP-0347)
+
+- Panier desktop fixé à droite (320px), toujours visible, scroll interne actif.
+- Panier mobile repliable : bouton flottant avec badge quantité, panneau plein écran (80%) animé en slide.
+- Actions panier : quantité modifiable min 1/max 99, retrait instantané avec toast, vidage via modale de confirmation, confirmation désactivée panier vide, recommander fusionne/remplace selon choix.
+- Animation ajout : miniature clonée se translate vers l'icône panier avec pulse sur badge et respect de `prefers-reduced-motion`.
+- Persistance : structure de stockage incluant variantId et prix, conservation au reload, changement de mode/catégorie et micro-coupure via file d'attente rejouée.
+- Commande en cours : état `pending` verrouille le panier et reste actif après rechargement jusqu'à validation/échec, puis récapitulatif avant envoi affiche panier, adresse et téléphone.
+
+---
+
 ## Résumé — Panier et persistance
 
 Ce document a défini l'ensemble des spécifications du **panier client** et de sa **persistance** :
@@ -681,4 +694,3 @@ Ce document a défini l'ensemble des spécifications du **panier client** et de 
 5. **Finalisation** : logique « commande en cours de traitement » et écran récapitulatif avant envoi.
 
 Ces spécifications serviront de référence pour les développements futurs front-end et back-end.
-
