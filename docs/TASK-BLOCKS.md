@@ -146,31 +146,31 @@ Convention suggérée : une issue = un bloc.
 
 ## BLOCK-021 — DEP-0201 à DEP-0210
 
-- Statut : à faire
-- Première ligne : DEP-0201 — Définir les couleurs principales de l’interface.
-- Dernière ligne : DEP-0210 — Définir l’échelle des cartes produits.
-- Titre d’issue suggéré : `[TASK] DEP-0201 à DEP-0210`
+- Statut : terminé
+- Première ligne : DEP-0201 — Définir les couleurs principales de l'interface.
+- Dernière ligne : DEP-0210 — Définir l'échelle des cartes produits.
+- Titre d'issue suggéré : `[TASK] DEP-0201 à DEP-0210`
 
 ## BLOCK-022 — DEP-0211 à DEP-0220
 
-- Statut : à faire
+- Statut : terminé
 - Première ligne : DEP-0211 — Définir le style visuel des cartes produits.
 - Dernière ligne : DEP-0220 — Définir les animations minimales du système.
-- Titre d’issue suggéré : `[TASK] DEP-0211 à DEP-0220`
+- Titre d'issue suggéré : `[TASK] DEP-0211 à DEP-0220`
 
 ## BLOCK-023 — DEP-0221 à DEP-0230
 
-- Statut : à faire
-- Première ligne : DEP-0221 — Définir l’animation d’ajout au panier.
+- Statut : terminé
+- Première ligne : DEP-0221 — Définir l'animation d'ajout au panier.
 - Dernière ligne : DEP-0230 — Définir le composant champ de recherche.
-- Titre d’issue suggéré : `[TASK] DEP-0221 à DEP-0230`
+- Titre d'issue suggéré : `[TASK] DEP-0221 à DEP-0230`
 
 ## BLOCK-024 — DEP-0231 à DEP-0240
 
-- Statut : à faire
+- Statut : terminé
 - Première ligne : DEP-0231 — Définir le composant carte produit.
 - Dernière ligne : DEP-0240 — Faire valider le système visuel de base avant de coder plus loin.
-- Titre d’issue suggéré : `[TASK] DEP-0231 à DEP-0240`
+- Titre d'issue suggéré : `[TASK] DEP-0231 à DEP-0240`
 
 ## BLOCK-025 — DEP-0241 à DEP-0250
 

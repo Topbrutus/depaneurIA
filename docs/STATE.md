@@ -20,7 +20,8 @@
 - Blocs fondation technique (`DEP-0121` à `DEP-0160`) terminés
 - Blocs parcours utilisateur et pages (`DEP-0161` à `DEP-0180`) terminés
 - Blocs comportements UX et dispositions (`DEP-0181` à `DEP-0200`) terminés
-- Prochain bloc recommandé : `DEP-0201` à `DEP-0220` (système visuel de base)
+- Blocs système visuel de base (`DEP-0201` à `DEP-0240`) terminés
+- Prochain bloc recommandé : `DEP-0241` à `DEP-0260` (structure catalogue produits)
 
 ## Observation importante
 
@@ -39,6 +40,7 @@ Le bloc 0001 (DEP-0001 à DEP-0010) reste complet. Le bloc GitHub de fondation (
 - DEP-0161 à DEP-0170 — cartes du site (client, dépanneur, livreur, admin) et pages principales définies
 - DEP-0171 à DEP-0180 — pages secondaires définies (adresses, historique, suivi, contact, légal, accessibilité, aide vocale)
 - DEP-0181 à DEP-0200 — dispositions desktop/mobile (3 sections vs empilée), emplacements composants (panier, chat, suggestions), comportements grille produits, panier et assistant
+- DEP-0201 à DEP-0240 — système visuel de base complet : couleurs (principales, secondaires, états, accessibilité), typographie (Inter, échelles complètes), styles visuels des composants, icônes (Lucide), animations (7 clés), spécifications de 12 composants de base
 
 **Fichiers de configuration créés :**
 - `tsconfig.json` — configuration TypeScript 5.3+ strict
@@ -46,10 +48,10 @@ Le bloc 0001 (DEP-0001 à DEP-0010) reste complet. Le bloc GitHub de fondation (
 - `.prettierrc` — configuration Prettier pour formatage uniforme
 - `package.json` — monorepo avec workspaces pnpm et scripts dev/build/test/lint/format
 - `.env.example` — modèle de variables d'environnement
-- Docs decisions : DEP-0121-0127, DEP-0136-0140, DEP-0161-0170, DEP-0171-0180, DEP-0181-0200
+- Docs decisions : DEP-0121-0127, DEP-0136-0140, DEP-0161-0170, DEP-0171-0180, DEP-0181-0200, DEP-0201-0240
 
 **Non commencé :**
-- DEP-0201 à DEP-0220 — système visuel de base (couleurs, typographie, composants)
+- DEP-0241 à DEP-0280 — structure catalogue produits et conventions
 
 ## Manques publics actuels
 
@@ -57,17 +59,17 @@ Aucun manque identifié dans les blocs DEP-0084 à DEP-0160. La fondation techni
 
 ## Prochaines actions suggérées
 
-**Bloc prioritaire : DEP-0201 à DEP-0220**
+**Bloc prioritaire : DEP-0241 à DEP-0280**
 
-1. **DEP-0201 à DEP-0210** — Définir le système de couleurs et de typographie :
-   - Couleurs principales, secondaires et d'état
-   - Typographie principale et secondaire
-   - Échelles de titres, textes, boutons et cartes
+1. **DEP-0241 à DEP-0260** — Définir la structure des données du catalogue :
+   - Structure des catégories, produits, variantes, photos, mots-clés
+   - Structure multi-tenant et disponibilité
+   - Ordre d'affichage et produits vedettes
 
-2. **DEP-0211 à DEP-0220** — Définir les styles visuels des composants :
-   - Styles des cartes produits, panier, chat, suggestions
-   - Badges d'état, alertes, écrans de chargement
-   - Icônes et animations minimales
+2. **DEP-0261 à DEP-0280** — Définir les conventions du catalogue :
+   - Conventions images (taille, nommage, compression, recadrage)
+   - Conventions textes (descriptions, mots-clés, synonymes)
+   - Jeu de données de démonstration initial
 
 ## Vérifications à faire dans GitHub UI (admin requis)
 
@@ -109,12 +111,12 @@ Aucun manque identifié dans les blocs DEP-0084 à DEP-0160. La fondation techni
 
 ## Dernière tâche terminée
 
-- DEP-0181 à DEP-0200 — dispositions desktop/mobile (3 sections vs empilée), emplacements exacts des composants (panier, chat, suggestions), comportements de la grille produits (clic et voix), comportements du panier selon les états de commande, comportements de l'assistant selon différents contextes utilisateur
+- DEP-0201 à DEP-0240 — système visuel de base complet : palette de couleurs complète (primaire, secondaire, états, accessibilité WCAG AA/AAA), typographie Inter avec échelles complètes (titres, corps, boutons, cartes), styles visuels de 8 composants clés, bibliothèque d'icônes Lucide, 7 animations critiques (ajout panier, suggestions, états), spécifications détaillées de 12 composants de base, checkpoint de validation avant implémentation
 
 ## En cours
 
 - Aucune tâche actuellement en cours
-- Prochaine étape : DEP-0201 à DEP-0220 (système visuel de base : couleurs, typographie, styles des composants)
+- Prochaine étape : DEP-0241 à DEP-0280 (structure catalogue et conventions produits)
 
 ## Bloqueurs
 
