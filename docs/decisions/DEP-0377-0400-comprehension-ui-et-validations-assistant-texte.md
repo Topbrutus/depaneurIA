@@ -2,22 +2,21 @@
 
 ## Périmètre
 
-Ce document définit les **logiques de compréhension des intents clients**
+Ce document définit les **logiques de compréhension** de l'assistant texte
 (catégorie, marque, parfum, quantité, correction, retrait, remplacement,
-commande incomplète, ambiguïtés), les **composants UI du chat** (boîte,
-entrée texte, bouton envoi, bouton micro, suggestions) et les **garde-fous
-comportementaux** de l'assistant texte en V1.
+commande incomplète, ambiguïtés), les **composants UI** de l'interface de
+chat (boîte, entrée texte, bouton envoi, bouton micro, suggestions), et les
+**validations comportementales** qui garantissent que l'assistant respecte
+les règles fondamentales de depaneurIA.
 
-Il conclut le macro-bloc DEP-0361–0400 en **gelant le comportement V1 complet
-de l'assistant texte** avant toute extension future.
+Il conclut le macro-bloc DEP-0361–DEP-0400 en **gelant le comportement V1
+de l'assistant texte**.
 
-Principe directeur : **l'assistant ne devine jamais seul.** Quand il ne comprend
-pas, il demande. Quand il y a ambiguïté, il propose un choix. Il ne crée ni ne
-modifie aucune donnée sans action explicite et validée du client.
+Principe directeur : **l'assistant pilote la boutique, il ne remplace pas
+la boutique.** Il déclenche des fonctions, ne génère pas de données libres.
 
 Il s'agit exclusivement de **documentation** : aucun code produit, aucune
-implémentation. Les spécifications décrites ici serviront de référence pour les
-futures implémentations front-end et back-end.
+implémentation.
 
 ---
 
@@ -25,45 +24,32 @@ futures implémentations front-end et back-end.
 
 ### Objectif
 
-Définir comment l'assistant reconnaît et mappe un mot désignant une catégorie
-de produits dans un message client.
+Définir comment l'assistant interprète une demande portant sur une catégorie
+de produits exprimée en langage naturel.
+
+### Règles d'interprétation
+
+| Entrée client               | Interprétation                              | Action déclenchée       |
+|-----------------------------|---------------------------------------------|-------------------------|
+| « Je veux des boissons »    | Catégorie = `boissons`                      | `ACTION_FILTER` catégorie|
+| « Montre-moi les snacks »   | Catégorie = `snacks`                        | `ACTION_FILTER` catégorie|
+| « Quelque chose à boire »   | Catégorie = `boissons` (synonyme)           | `ACTION_FILTER` catégorie|
+| « J'ai faim »               | Trop vague — pas de catégorie identifiable  | Basculer vers DEP-0371  |
 
 ### Mécanisme
 
-1. L'assistant reçoit un message texte du client.
-2. Il tente de faire correspondre les tokens du message à la liste des
-   **catégories disponibles dans le catalogue**.
-3. Si une correspondance directe ou proche est trouvée (synonymes courants),
-   il déclenche `ACTION_FILTER` avec la catégorie identifiée.
-4. Si aucune correspondance n'est trouvée, il demande une clarification.
-
-### Correspondances acceptées
-
-| Token client       | Catégorie mappée  | Type de correspondance |
-|--------------------|-------------------|------------------------|
-| « chips »          | Chips & snacks    | Directe                |
-| « snacks »         | Chips & snacks    | Synonyme               |
-| « boissons »       | Boissons          | Directe                |
-| « lait »           | Produits laitiers | Directe                |
-| « café »           | Épicerie          | Directe                |
-
-> La liste exhaustive des catégories et synonymes est définie dans le catalogue
-> (DEP-0241–0255). Ce document fixe uniquement la logique de mappage.
+1. L'assistant compare le terme saisi aux `label`, `tags` et synonymes
+   des catégories du catalogue (DEP-0241, DEP-0245, DEP-0246).
+2. Si une correspondance unique est trouvée → `ACTION_FILTER` sur cette
+   catégorie.
+3. Si plusieurs catégories correspondent → clarification (DEP-0368).
+4. Si aucune catégorie ne correspond → relance (DEP-0371).
 
 ### Règles
 
-- La correspondance est insensible à la casse et aux accents.
-- Un seul token peut identifier une catégorie (pas besoin de phrase complète).
-- En cas de doute entre deux catégories proches, l'assistant propose les deux.
-- L'assistant n'invente jamais une catégorie absente du catalogue.
-
-### Cas attendus
-
-| Message client             | Résultat attendu                                  |
-|----------------------------|---------------------------------------------------|
-| « chips »                  | ✅ Filtre catégorie Chips & snacks déclenché      |
-| « quelque chose à boire »  | ✅ Filtre catégorie Boissons déclenché            |
-| « des trucs »              | ❌ Catégorie non identifiée — demande clarification|
+- La correspondance n'est pas sensible à la casse ni aux accents.
+- L'assistant ne crée jamais une catégorie absente du catalogue.
+- La catégorie identifiée doit exister et contenir au moins un produit actif.
 
 ---
 
@@ -71,34 +57,33 @@ de produits dans un message client.
 
 ### Objectif
 
-Définir comment l'assistant reconnaît et mappe un mot désignant une marque
-de produits présente dans le catalogue.
+Définir comment l'assistant interprète une demande portant sur une marque
+de produit spécifique.
+
+### Règles d'interprétation
+
+| Entrée client          | Interprétation                                | Action déclenchée              |
+|------------------------|-----------------------------------------------|--------------------------------|
+| « Du Pepsi »           | Marque = `Pepsi`                              | `ACTION_SEARCH` marque=Pepsi   |
+| « Un Coca »            | Marque = `Coca-Cola` (synonyme)               | `ACTION_SEARCH` marque=Coca-Cola|
+| « De la Red Bull »     | Marque = `Red Bull`                           | `ACTION_SEARCH` marque=Red Bull|
+| « Une boisson connue » | Marque non identifiable                       | Basculer vers DEP-0371         |
 
 ### Mécanisme
 
-1. L'assistant reçoit un message contenant le nom d'une marque.
-2. Il tente de faire correspondre le token à la liste des **marques disponibles
-   dans le catalogue**.
-3. Si une correspondance directe ou proche est trouvée, il déclenche
-   `ACTION_FILTER` avec la marque identifiée.
-4. Si aucune correspondance, il informe le client que cette marque n'est pas
-   disponible et propose les marques proches si elles existent.
+1. L'assistant compare le terme au champ `brand` des produits (DEP-0242)
+   et aux synonymes de marque (DEP-0246, `context = "marque"`).
+2. Si une marque unique est identifiée → `ACTION_SEARCH` avec filtre marque.
+3. Si plusieurs marques correspondent → clarification (DEP-0368).
+4. Si la marque est introuvable dans le catalogue → DEP-0370 (refus produit
+   absent).
 
 ### Règles
 
-- La correspondance est insensible à la casse et aux accents.
-- Les abréviations courantes sont acceptées (ex. : « MC » pour une marque
-  dont c'est l'abréviation reconnue dans le catalogue).
-- L'assistant n'invente jamais une marque absente du catalogue.
-- Si la marque existe mais qu'aucun produit n'est disponible, il le signale.
-
-### Cas attendus
-
-| Message client   | Résultat attendu                                    |
-|------------------|-----------------------------------------------------|
-| « Lay's »        | ✅ Filtre marque Lay's déclenché                    |
-| « Pepsi »        | ✅ Filtre marque Pepsi déclenché                    |
-| « MarcheXYZ »    | ❌ Marque inconnue — assistant informe le client    |
+- L'assistant n'invente pas de marque ni ne suggère une marque absente du
+  catalogue.
+- Les abréviations et formes orales sont prises en compte via les synonymes
+  (DEP-0246).
 
 ---
 
@@ -106,34 +91,32 @@ de produits présente dans le catalogue.
 
 ### Objectif
 
-Définir comment l'assistant reconnaît et mappe un mot désignant un parfum
-ou une variante de produit (goût, arôme, saveur).
+Définir comment l'assistant interprète une demande portant sur un parfum,
+une saveur ou un goût de produit.
+
+### Règles d'interprétation
+
+| Entrée client              | Interprétation                              | Action déclenchée               |
+|----------------------------|---------------------------------------------|---------------------------------|
+| « Du Pepsi cerise »        | Marque = Pepsi, parfum = cerise             | `ACTION_SEARCH` marque + parfum |
+| « Chips saveur ketchup »   | Catégorie = chips, parfum = ketchup         | `ACTION_SEARCH` catégorie + parfum|
+| « Quelque chose de sucré » | Trop vague — parfum non identifiable        | Basculer vers DEP-0371          |
 
 ### Mécanisme
 
-1. L'assistant reçoit un message contenant un parfum (ex. : « ketchup »,
-   « nature », « barbecue »).
-2. Il tente de faire correspondre le token à la liste des **variantes disponibles**
-   pour les produits ou catégories déjà identifiés dans la session.
-3. Si une correspondance est trouvée, il affine le filtre ou la sélection.
-4. Si aucune correspondance, il informe le client que ce parfum n'est pas
-   disponible dans la sélection actuelle.
+1. Le parfum est interprété comme un modificateur du produit ou de la variante
+   (champ `label` de la variante, DEP-0243, ou synonymes DEP-0246,
+   `context = "gout"`).
+2. Si le produit + parfum est identifié sans ambiguïté → `ACTION_SHOW_PRODUCT`.
+3. Si plusieurs variantes correspondent → clarification (DEP-0368).
+4. Si aucun résultat → DEP-0370.
 
 ### Règles
 
-- Le parfum est toujours contextualisé : il affine une sélection existante
-  (catégorie ou marque déjà identifiée).
-- L'assistant n'applique pas un filtre parfum sans contexte de produit ou
-  catégorie préalable.
-- L'assistant n'invente jamais un parfum absent du catalogue.
-
-### Cas attendus
-
-| Contexte                | Message client    | Résultat attendu                          |
-|-------------------------|-------------------|-------------------------------------------|
-| Catégorie chips filtrée | « ketchup »       | ✅ Variante ketchup sélectionnée          |
-| Catégorie chips filtrée | « pizza »         | ❌ Parfum indisponible — client informé   |
-| Aucun contexte          | « ketchup »       | ❌ Contexte manquant — demande de précision|
+- Le parfum/saveur est toujours traité comme un complément, jamais comme
+  critère principal isolé.
+- L'assistant ne préjuge pas du parfum si non exprimé — il propose la variante
+  par défaut (DEP-0243 `is_default = true`).
 
 ---
 
@@ -141,44 +124,35 @@ ou une variante de produit (goût, arôme, saveur).
 
 ### Objectif
 
-Définir comment l'assistant extrait et applique une quantité mentionnée par
-le client dans son message.
+Définir comment l'assistant interprète une quantité exprimée dans une demande
+client.
+
+### Règles d'interprétation
+
+| Entrée client                | Quantité extraite | Comportement                               |
+|------------------------------|-------------------|--------------------------------------------|
+| « Un Pepsi »                 | 1                 | Ajout de 1 unité                           |
+| « Deux Pepsi »               | 2                 | Ajout de 2 unités                          |
+| « 3 canettes de Coca »       | 3                 | Ajout de 3 unités                          |
+| « Beaucoup de chips »        | Non déterminable  | Demander clarification quantité            |
+| « Quelques bouteilles »      | Non déterminable  | Demander clarification quantité            |
 
 ### Mécanisme
 
-1. L'assistant détecte la présence d'un nombre ou d'une expression numérique
-   dans le message (chiffre, mot numéral, expression courante).
-2. Il associe cette quantité au produit identifié dans le même message ou
-   dans le contexte immédiat de la session.
-3. Il déclenche `ACTION_ADD_TO_CART` ou `ACTION_UPDATE_QTY` avec la quantité
-   extraite.
-
-### Expressions acceptées
-
-| Expression client         | Quantité extraite |
-|---------------------------|-------------------|
-| « 2 », « deux »           | 2                 |
-| « trois »                 | 3                 |
-| « une bouteille »         | 1                 |
-| « un paquet »             | 1                 |
-| « quelques-uns »          | → demande précision|
+1. L'assistant extrait le nombre exprimé en chiffres ou en lettres (un, deux,
+   trois… jusqu'à 99).
+2. Si aucune quantité n'est exprimée → quantité = 1 par défaut (DEP-0331).
+3. Si la quantité est vague ou non numérique → demander clarification
+   (ex. : « Tu en veux combien ? »).
+4. La quantité extraite est passée à `ACTION_ADD_TO_CART` (DEP-0362).
 
 ### Règles
 
-- La quantité minimale est 1 ; la quantité maximale en V1 est définie par le
-  catalogue (limite stock ou limite panier).
-- Si la quantité est ambiguë (ex. : « quelques »), l'assistant demande une
-  précision avant d'agir.
-- Si aucune quantité n'est mentionnée, la valeur par défaut est 1.
-- L'assistant ne dépasse jamais le stock disponible.
-
-### Cas attendus
-
-| Message client                  | Résultat attendu                           |
-|---------------------------------|--------------------------------------------|
-| « 3 Pepsi »                     | ✅ Quantité 3 extraite, produit ajouté     |
-| « deux paquets de chips Lay's » | ✅ Quantité 2 extraite, produit ajouté     |
-| « quelques chips »              | ❌ Ambiguïté — demande de précision        |
+- Quantité minimale : 1. Quantité maximale en V1 : 99.
+- L'assistant n'applique pas de quantité supérieure à celle exprimée
+  explicitement.
+- La gestion des packs (ex. « un pack de 6 ») est traitée via le champ
+  `pack_quantity` de la variante (DEP-0243), pas via la quantité demandée.
 
 ---
 
@@ -186,41 +160,32 @@ le client dans son message.
 
 ### Objectif
 
-Définir comment l'assistant détecte et applique une correction apportée par
-le client sur un choix précédemment fait dans la session.
+Définir comment l'assistant interprète une correction apportée par le client
+sur une action précédemment réalisée.
+
+### Exemples de corrections
+
+| Entrée client                           | Interprétation                                  |
+|-----------------------------------------|-------------------------------------------------|
+| « Non, je voulais du Coca, pas Pepsi »  | Retirer Pepsi, chercher Coca                    |
+| « Pas ça, l'autre format »              | Afficher les autres variantes du même produit   |
+| « Annule ce que tu viens d'ajouter »    | Retirer le dernier produit ajouté               |
+| « En fait non »                         | Annuler la dernière action de l'assistant       |
 
 ### Mécanisme
 
-1. L'assistant détecte un **signal de correction** dans le message client
-   (négation, reformulation, mot de correction explicite).
-2. Il identifie l'élément corrigé (produit, quantité, marque, parfum).
-3. Il annule ou modifie l'action précédente et applique la nouvelle valeur.
-4. Il confirme la correction au client avant de poursuivre.
-
-### Signaux de correction reconnus
-
-| Signal                         | Type          |
-|--------------------------------|---------------|
-| « non », « non pas ça »        | Annulation    |
-| « plutôt », « en fait »        | Remplacement  |
-| « pas ça, mais… »              | Remplacement  |
-| « retire », « enlève »         | Retrait (→ DEP-0382) |
-| « change », « modifie »        | Modification  |
+1. L'assistant détecte les mots-clés de correction (`non`, `pas ça`, `annule`,
+   `en fait`, `plutôt`, `à la place`).
+2. Il identifie l'action du tour précédent.
+3. Il annule l'action : si un ajout au panier a eu lieu → `ACTION_UPDATE_QTY`
+   à 0 (retrait effectif) ou `ACTION_SEARCH` sur le produit corrigé.
+4. Il confirme la correction : « Compris ! J'ai retiré [produit]. »
 
 ### Règles
 
-- L'assistant confirme toujours la correction avant d'appliquer le changement.
-- En cas de doute sur l'élément corrigé, il demande une clarification.
-- La correction s'applique **uniquement à la session en cours**.
-- Une correction ne peut pas s'appliquer à une commande déjà validée et envoyée.
-
-### Cas attendus
-
-| Message client           | Résultat attendu                                    |
-|--------------------------|-----------------------------------------------------|
-| « non, plutôt Pepsi »    | ✅ Produit précédent remplacé par Pepsi, confirmé   |
-| « en fait, 2 et non 3 »  | ✅ Quantité mise à jour à 2, confirmé               |
-| « non »                  | ❌ Ambiguïté — l'assistant demande ce qu'il faut corriger|
+- La correction porte uniquement sur l'action **immédiatement précédente**.
+- L'assistant ne peut corriger que les actions de la session en cours.
+- Si la correction est ambiguë → demander clarification (DEP-0368).
 
 ---
 
@@ -228,41 +193,34 @@ le client sur un choix précédemment fait dans la session.
 
 ### Objectif
 
-Définir comment l'assistant reconnaît et exécute une demande de retrait d'un
-produit du panier.
+Définir comment l'assistant interprète une demande de retrait d'un produit
+du panier.
+
+### Exemples
+
+| Entrée client                   | Interprétation                                   |
+|---------------------------------|--------------------------------------------------|
+| « Retire le Pepsi »             | Retirer Pepsi du panier (quantité → 0)           |
+| « Enlève les chips »            | Retirer les chips du panier                      |
+| « Je ne veux plus le Coca »     | Retirer Coca du panier                           |
+| « Vide mon panier »             | Retirer tous les produits du panier              |
 
 ### Mécanisme
 
-1. L'assistant détecte un **signal de retrait** dans le message client.
-2. Il identifie le produit ciblé (par nom, marque, parfum ou position dans
-   le panier si mentionné).
-3. Il déclenche `ACTION_UPDATE_QTY` à 0 (ou une action de suppression dédiée)
-   sur le produit identifié.
-4. Il confirme le retrait au client.
-
-### Signaux de retrait reconnus
-
-| Signal                              | Exemple                          |
-|-------------------------------------|----------------------------------|
-| « retire », « enlève »              | « Enlève les chips »             |
-| « supprime », « efface »            | « Supprime le Pepsi »            |
-| « je ne veux plus »                 | « Je ne veux plus le lait »      |
-| « annule »                          | « Annule le dernier ajout »      |
+1. L'assistant identifie le produit à retirer dans le panier actuel.
+2. Si le produit est dans le panier → `ACTION_UPDATE_QTY` à 0.
+3. Si le produit n'est pas dans le panier → répondre :
+   « Ce produit n'est pas dans ton panier. »
+4. Si « vide mon panier » → `ACTION_SHOW_CART` puis confirmation avant
+   vidage total.
 
 ### Règles
 
-- Si plusieurs produits correspondent à la description, l'assistant affiche
-  les candidats et demande lequel retirer.
-- Le retrait est confirmé avant d'être appliqué.
-- Si le panier est vide, l'assistant informe le client qu'il n'y a rien à retirer.
-
-### Cas attendus
-
-| Message client               | Résultat attendu                                  |
-|------------------------------|---------------------------------------------------|
-| « Enlève les chips Lay's »   | ✅ Chips Lay's retirées du panier, confirmé       |
-| « Retire le Pepsi »          | ✅ Pepsi retiré du panier, confirmé               |
-| « Retire les chips » (2 réf.)| ❌ Ambiguïté — assistant affiche les candidats    |
+- Le retrait est toujours précédé d'une **confirmation implicite** dans la
+  réponse de l'assistant (ex. : « Retiré ! »).
+- Le vidage total du panier nécessite une confirmation explicite du client
+  avant exécution.
+- L'assistant ne peut retirer que des produits présents dans le panier actif.
 
 ---
 
@@ -270,41 +228,33 @@ produit du panier.
 
 ### Objectif
 
-Définir comment l'assistant reconnaît et exécute une demande de remplacement
-d'un produit par un autre dans le panier.
+Définir comment l'assistant interprète une demande de remplacement d'un
+produit par un autre dans le panier.
+
+### Exemples
+
+| Entrée client                           | Interprétation                                  |
+|-----------------------------------------|-------------------------------------------------|
+| « Remplace le Pepsi par du Coca »       | Retirer Pepsi, ajouter Coca (même quantité)     |
+| « Change le format, je veux le grand »  | Retirer variante actuelle, ajouter grande variante|
+| « Plutôt des chips sel que ketchup »    | Retirer chips ketchup, ajouter chips sel        |
 
 ### Mécanisme
 
-1. L'assistant détecte un **signal de remplacement** dans le message client.
-2. Il identifie le **produit source** (à remplacer) et le **produit cible**
-   (le nouveau produit).
-3. Il retire le produit source du panier et ajoute le produit cible avec la
-   même quantité.
-4. Il confirme le remplacement au client.
-
-### Signaux de remplacement reconnus
-
-| Signal                           | Exemple                                     |
-|----------------------------------|---------------------------------------------|
-| « remplace … par … »             | « Remplace le Pepsi par du Coca »           |
-| « plutôt … à la place de … »     | « Plutôt du lait entier à la place du lait »|
-| « change … pour … »              | « Change les Lay's pour des Pringles »      |
+1. L'assistant identifie le produit **à retirer** et le produit **à ajouter**.
+2. Il vérifie que le produit à retirer est dans le panier.
+3. Il vérifie que le produit de remplacement est disponible dans le catalogue.
+4. Il exécute dans cet ordre :
+   - `ACTION_UPDATE_QTY` à 0 sur le produit retiré.
+   - `ACTION_ADD_TO_CART` sur le produit ajouté (même quantité que le retiré).
+5. Il confirme : « J'ai remplacé [produit A] par [produit B]. »
 
 ### Règles
 
-- Le produit cible doit exister dans le catalogue. Sinon, l'assistant informe
-  le client et conserve le produit source.
-- Si le produit source n'est pas dans le panier, l'assistant le signale.
-- Le remplacement est confirmé avant d'être appliqué.
-- La quantité est conservée à l'identique sauf indication contraire du client.
-
-### Cas attendus
-
-| Message client                        | Résultat attendu                                |
-|---------------------------------------|-------------------------------------------------|
-| « Remplace le Pepsi par du Coca »     | ✅ Pepsi retiré, Coca ajouté (même quantité)    |
-| « Remplace le Pepsi par du ZYX »      | ❌ Produit ZYX introuvable — source conservé    |
-| « Remplace le Pepsi » (sans cible)    | ❌ Cible manquante — demande de précision       |
+- Si le produit de remplacement est introuvable → DEP-0370.
+- Si le produit à retirer n'est pas dans le panier → signaler l'erreur et
+  proposer uniquement l'ajout du nouveau produit.
+- La quantité du produit retiré est conservée pour le produit ajouté.
 
 ---
 
@@ -312,44 +262,35 @@ d'un produit par un autre dans le panier.
 
 ### Objectif
 
-Définir comment l'assistant détecte qu'un message client contient une demande
-incomplète (produit identifié mais quantité, marque ou parfum manquant) et
-comment il demande les informations manquantes.
+Définir comment l'assistant gère une tentative de commande avec un panier
+vide ou un compte incomplet.
+
+### Cas couverts
+
+| Situation                        | Réponse de l'assistant                                             |
+|----------------------------------|--------------------------------------------------------------------|
+| Panier vide + demande commande   | « Ton panier est vide. Ajoute d'abord des articles. »              |
+| Client non connecté              | « Pour commander, connecte-toi d'abord à ton compte. »            |
+| Adresse de livraison manquante   | « Il manque une adresse de livraison. Ajoute-la dans ton profil. » |
+| Compte incomplet (DEP-0313)      | « Ton compte est incomplet. Complète ton profil pour continuer. »  |
 
 ### Mécanisme
 
-1. L'assistant reçoit un message où un produit est identifié mais des
-   informations nécessaires manquent.
-2. Il identifie les **champs manquants** (quantité par défaut = 1 si absent,
-   marque ou parfum requis si plusieurs options existent).
-3. Il pose une question ciblée pour compléter la demande avant d'agir.
+1. Avant de déclencher `ACTION_CONFIRM_ORDER`, l'assistant vérifie :
+   - Panier non vide.
+   - Client connecté.
+   - Adresse de livraison présente.
+2. Si une vérification échoue → message d'erreur adapté + orientation vers
+   l'action corrective.
+3. L'assistant ne tente pas de déclencher `ACTION_CONFIRM_ORDER` si une
+   condition bloquante est identifiée.
 
-### Règles de complétude
+### Règles
 
-| Champ     | Comportement si absent                                             |
-|-----------|--------------------------------------------------------------------|
-| Quantité  | Valeur par défaut : 1 — pas de demande de précision               |
-| Marque    | Si une seule marque disponible : appliquée directement            |
-| Marque    | Si plusieurs marques disponibles : demande de précision (→ DEP-0385)|
-| Parfum    | Si un seul parfum disponible : appliqué directement               |
-| Parfum    | Si plusieurs parfums disponibles : demande de précision           |
-| Produit   | Non identifiable : demande de précision sur le produit            |
-
-### Règles générales
-
-- L'assistant ne bloque jamais inutilement : si la valeur par défaut est
-  suffisante, il l'applique sans demander.
-- Il ne pose qu'une seule question à la fois pour éviter la surcharge.
-- Une demande incomplète ne génère aucune action avant d'être complétée.
-
-### Cas attendus
-
-| Message client      | Résultat attendu                                     |
-|---------------------|------------------------------------------------------|
-| « des chips »       | ✅ Si 1 marque dispo : ajout direct avec quantité 1  |
-| « des chips »       | ❌ Si N marques dispo : demande de marque (→ DEP-0385)|
-| « du Pepsi »        | ✅ Si 1 format dispo : ajout direct avec quantité 1  |
-| « quelque chose »   | ❌ Produit non identifiable — demande de précision   |
+- Les conditions sont vérifiées dans l'ordre listé ci-dessus (panier en
+  premier).
+- Une seule condition bloquante est signalée par tour (pas de liste d'erreurs
+  simultanées).
 
 ---
 
@@ -357,140 +298,97 @@ comment il demande les informations manquantes.
 
 ### Objectif
 
-Définir la stratégie de résolution lorsque le client demande un produit
-identifiable par catégorie + parfum mais pour lequel plusieurs marques sont
-disponibles dans le catalogue.
+Définir comment l'assistant gère le cas où un produit générique (ex. : chips
+ketchup) correspond à plusieurs marques différentes dans le catalogue.
 
-### Exemple de référence
+### Scénario
 
-> Client : « des chips ketchup »
-> → Catégorie : Chips & snacks ✅
-> → Parfum : Ketchup ✅
-> → Marque : Lay's Ketchup ET Pringles Ketchup ET Marque X Ketchup ← ambiguïté
+- Le client demande : « Je veux des chips ketchup. »
+- Le catalogue contient : Lay's ketchup, Pringles ketchup, Doritos ketchup.
 
 ### Mécanisme
 
-1. L'assistant identifie la catégorie et le parfum.
-2. Il détecte qu'il existe **plusieurs produits correspondants** de marques
-   différentes.
-3. Il affiche les options disponibles sous forme de liste de suggestions
-   cliquables.
-4. Le client sélectionne une option ou précise sa préférence par texte.
-5. L'assistant applique le choix et confirme l'ajout.
-
-### Format de la question posée
-
-> « J'ai trouvé plusieurs chips ketchup. Laquelle veux-tu ? »
-> → [Lay's Ketchup 200g — X,XX €]
-> → [Pringles Ketchup 165g — X,XX €]
-> → [Autre marque…]
+1. L'assistant identifie : catégorie = chips, parfum = ketchup, marque =
+   indéterminée.
+2. Il déclenche `ACTION_SEARCH` avec les critères identifiés.
+3. Il affiche les résultats via `ACTION_SHOW_POPULAR` ou liste filtrée et
+   déclenche la clarification (DEP-0368) :
+   « J'ai trouvé [N] chips ketchup. Tu veux lequel ? »
+4. Le client sélectionne → `ACTION_ADD_TO_CART` ou `ACTION_SHOW_PRODUCT`.
 
 ### Règles
 
-- L'assistant n'ajoute **jamais** un produit arbitrairement en cas d'ambiguïté
-  de marque.
-- Les options sont tirées exclusivement du catalogue en temps réel.
-- Si une seule option est disponible après filtrage, elle est proposée
-  directement sans question.
-- Les prix affichés sont ceux du catalogue (aucun prix inventé — DEP-0397).
-
-### Cas attendus
-
-| Situation                                    | Résultat attendu                               |
-|----------------------------------------------|------------------------------------------------|
-| 3 marques de chips ketchup disponibles       | ✅ Liste des 3 options affichée                |
-| 1 seule marque de chips ketchup disponible   | ✅ Produit proposé directement sans ambiguïté  |
-| 0 marque de chips ketchup disponible         | ❌ Client informé de l'indisponibilité         |
+- Maximum 4 marques proposées en clarification.
+- Si plus de 4 résultats → afficher les 4 les mieux classés (popularité ou
+  ordre catalogue).
+- L'assistant ne choisit jamais une marque sans confirmation du client.
 
 ---
 
-## DEP-0386 — Logique d'ambiguïté « Pepsi » avec plusieurs formats (si un jour il y en a)
+## DEP-0386 — Logique d'ambiguïté « Pepsi » avec plusieurs formats
 
 ### Objectif
 
-Définir la stratégie de résolution lorsque le client demande « Pepsi » et que
-plusieurs formats (33 cl, 50 cl, 1,5 L, canette, bouteille) sont disponibles
-dans le catalogue.
+Définir comment l'assistant gère le cas où un produit identifié par sa marque
+existe en plusieurs formats (variantes) dans le catalogue.
 
-### Statut V1
+### Scénario
 
-> **En V1, un seul format de Pepsi est disponible dans le catalogue.** Cette
-> logique est **définie mais non active**. Elle s'activera automatiquement dès
-> qu'un second format sera ajouté au catalogue sans modification de code.
+- Le client demande : « Un Pepsi. »
+- Le catalogue contient : Pepsi 355ml, Pepsi 591ml, Pepsi 2L, Pepsi 6× 355ml.
 
-### Mécanisme (si ambiguïté détectée)
+### Mécanisme
 
-1. L'assistant identifie le produit « Pepsi » sans format précisé.
-2. Il détecte que plusieurs formats sont disponibles.
-3. Il affiche les options de format disponibles sous forme de suggestions.
-4. Le client sélectionne son format.
-5. L'assistant confirme l'ajout.
-
-### Format de la question posée (si activée)
-
-> « Quel format de Pepsi veux-tu ? »
-> → [Pepsi 33 cl — X,XX €]
-> → [Pepsi 1,5 L — X,XX €]
+1. L'assistant identifie : marque = Pepsi, format = indéterminé.
+2. Si la variante par défaut est clairement définie (`is_default = true`,
+   DEP-0243) → proposer directement la variante par défaut avec confirmation.
+   Ex. : « J'ai trouvé du Pepsi 355ml. C'est bien ça ? »
+3. Si aucune variante par défaut n'est définie ou si le catalogue contient
+   plusieurs variantes actives → clarification (DEP-0368) :
+   « Tu veux quel format ? 355ml, 591ml ou 2L ? »
+4. Le client confirme ou choisit → `ACTION_ADD_TO_CART`.
 
 ### Règles
 
-- En V1 (un seul format) : le produit est ajouté directement sans question.
-- Dès qu'un second format existe : la question est posée automatiquement.
-- L'assistant n'invente jamais un format absent du catalogue.
-- Les prix affichés sont ceux du catalogue (aucun prix inventé — DEP-0397).
-
-### Cas attendus
-
-| Situation                          | Résultat attendu                                 |
-|------------------------------------|--------------------------------------------------|
-| 1 seul format Pepsi (V1)           | ✅ Ajout direct, pas de question de format       |
-| 2+ formats Pepsi (futur)           | ✅ Liste des formats affichée, choix demandé     |
-| Pepsi absent du catalogue          | ❌ Client informé de l'indisponibilité           |
+- La variante par défaut est toujours proposée en premier.
+- Maximum 3 formats proposés en clarification sans scroll.
+- En V1, le catalogue Pepsi contient une variante principale — ce cas reste
+  préventif pour les évolutions futures.
 
 ---
 
-## DEP-0387 — Logique d'ambiguïté « du lait » avec plusieurs sortes (si un jour il y en a)
+## DEP-0387 — Logique d'ambiguïté « du lait » avec plusieurs sortes
 
 ### Objectif
 
-Définir la stratégie de résolution lorsque le client demande « du lait » et que
-plusieurs sortes (entier, demi-écrémé, écrémé, végétal…) sont disponibles dans
-le catalogue.
+Définir comment l'assistant gère le cas d'un produit générique (ex. : lait)
+disponible en plusieurs variétés ou formats.
 
-### Statut V1
+### Scénario
 
-> **En V1, une seule sorte de lait est disponible dans le catalogue.** Cette
-> logique est **définie mais non active**. Elle s'activera automatiquement dès
-> qu'une seconde sorte sera ajoutée au catalogue sans modification de code.
+- Le client demande : « Du lait. »
+- Le catalogue contient : lait entier 1L, lait demi-écrémé 1L, lait écrémé 1L,
+  lait de soya 946ml.
 
-### Mécanisme (si ambiguïté détectée)
+### Mécanisme
 
-1. L'assistant identifie le produit « lait » sans sorte précisée.
-2. Il détecte que plusieurs sortes sont disponibles.
-3. Il affiche les options de sortes disponibles sous forme de suggestions.
-4. Le client sélectionne sa sorte.
-5. L'assistant confirme l'ajout.
-
-### Format de la question posée (si activée)
-
-> « Quelle sorte de lait veux-tu ? »
-> → [Lait entier 1 L — X,XX €]
-> → [Lait demi-écrémé 1 L — X,XX €]
+1. L'assistant identifie : catégorie = produits laitiers, produit = lait,
+   variété = indéterminée.
+2. Il déclenche `ACTION_SEARCH` → plusieurs résultats.
+3. Il déclenche la clarification (DEP-0368) en proposant les distinctions
+   pertinentes :
+   « Tu veux du lait entier, demi-écrémé, écrémé ou végétal ? »
+4. Le client répond → affinage ou `ACTION_ADD_TO_CART`.
 
 ### Règles
 
-- En V1 (une seule sorte) : le produit est ajouté directement sans question.
-- Dès qu'une seconde sorte existe : la question est posée automatiquement.
-- L'assistant n'invente jamais une sorte absente du catalogue.
-- Les prix affichés sont ceux du catalogue (aucun prix inventé — DEP-0397).
-
-### Cas attendus
-
-| Situation                        | Résultat attendu                                 |
-|----------------------------------|--------------------------------------------------|
-| 1 seule sorte de lait (V1)       | ✅ Ajout direct, pas de question de sorte        |
-| 2+ sortes de lait (futur)        | ✅ Liste des sortes affichée, choix demandé      |
-| Lait absent du catalogue         | ❌ Client informé de l'indisponibilité           |
+- La clarification porte sur l'axe de distinction le plus significatif
+  (type de lait avant format de contenant).
+- Maximum 4 options par niveau de clarification.
+- Si le client répond par une exclusion (« pas écrémé ») → affiner la liste
+  et relancer la clarification.
+- En V1, ce cas s'applique à tous les produits dont le catalogue contient
+  plus d'une variante active sans variante par défaut claire.
 
 ---
 
@@ -498,28 +396,37 @@ le catalogue.
 
 ### Objectif
 
-Définir les caractéristiques de la boîte de chat qui contient l'interface
-conversationnelle de l'assistant texte.
+Définir la structure et le comportement du conteneur principal de l'interface
+de chat de l'assistant texte.
 
-### Spécifications
+### Structure
 
-| Attribut               | Valeur                                                        |
-|------------------------|---------------------------------------------------------------|
-| Emplacement            | Partie droite ou basse de l'écran boutique (selon breakpoint) |
-| État par défaut        | Réduit (icône ou bandeau discret) — non intrusif              |
-| État ouvert            | Panneau latéral ou overlay flottant selon la taille d'écran   |
-| Déclencheur d'ouverture| Clic sur l'icône assistant ou le bouton « Aide »              |
-| Déclencheur de fermeture| Clic sur la croix, touche Échap, ou clic hors du panneau     |
-| Hauteur visible (ouvert)| 60 % de la hauteur de l'écran (desktop), plein écran (mobile)|
-| Scrollable             | Oui — historique de la session visible et scrollable          |
-| Persistance affichage  | La boîte reste ouverte si le client navigue dans la boutique  |
+| Élément              | Description                                                    |
+|----------------------|----------------------------------------------------------------|
+| Emplacement desktop  | Section 3 (droite), sous le panier (DEP-0184)                  |
+| Emplacement mobile   | Panneau déployable depuis l'icône flottante (DEP-0187)         |
+| Hauteur desktop      | Fixe — occupe l'espace résiduel sous le panier                 |
+| Hauteur mobile       | 70% de la hauteur d'écran en mode déployé                      |
+| Structure interne    | Zone messages (scrollable) + zone saisie (fixe en bas)         |
+| Ordre des messages   | Chronologique, le plus récent en bas                           |
 
-### Règles
+### Comportement
 
-- La boîte de chat n'obstrue jamais le bouton de validation du panier.
-- Elle est accessible au clavier (focus trap quand ouverte).
-- Elle ne s'ouvre pas automatiquement sans action du client.
-- Sur mobile, elle prend tout l'écran une fois ouverte pour faciliter la saisie.
+- La boîte de chat est visible uniquement si le mode assisté est actif
+  (DEP-0299).
+- En mode manuel, la boîte de chat n'est pas affichée.
+- Le scroll de la zone messages est automatique vers le bas à chaque nouveau
+  message.
+- L'historique de la session est conservé tant que la session est ouverte.
+  À la fermeture (DEP-0376), l'historique est effacé.
+
+### États
+
+| État             | Description visuelle                                          |
+|------------------|---------------------------------------------------------------|
+| Actif            | Boîte visible, entrée texte active                            |
+| Chargement       | Indicateur de frappe animé (trois points) pendant le traitement|
+| Fermé            | Boîte masquée ou réduite à l'icône (mobile)                   |
 
 ---
 
@@ -527,28 +434,35 @@ conversationnelle de l'assistant texte.
 
 ### Objectif
 
-Définir les caractéristiques du champ de saisie dans lequel le client tape
-son message à destination de l'assistant.
+Définir le champ de saisie texte dans lequel le client tape ses demandes à
+l'assistant.
 
-### Spécifications
+### Structure
 
-| Attribut              | Valeur                                                         |
-|-----------------------|----------------------------------------------------------------|
-| Type                  | Zone de texte mono-ligne (extensible si message long)          |
-| Placeholder           | « Que cherches-tu ? (ex. : 2 Pepsi, des chips ketchup…) »     |
-| Taille maximale       | 500 caractères                                                 |
-| Soumission clavier    | Touche Entrée (sans Shift) envoie le message                  |
-| Soumission mobile     | Bouton « Envoyer » du clavier natif ou bouton UI (DEP-0390)   |
-| Auto-focus            | Oui — dès que la boîte de chat est ouverte                    |
-| Accessibilité         | Label ARIA : « Message à l'assistant »                        |
+| Attribut           | Valeur                                                         |
+|--------------------|----------------------------------------------------------------|
+| Type               | Champ texte mono-ligne (extensible à 3 lignes si long texte)  |
+| Placeholder        | « Écris ta demande… »                                          |
+| Longueur max       | 280 caractères                                                 |
+| Emplacement        | Bas de la boîte de chat, à gauche du bouton envoi              |
+| Largeur            | Pleine largeur disponible (hors bouton envoi et micro)         |
+
+### Comportement
+
+| Action                   | Résultat                                                     |
+|--------------------------|--------------------------------------------------------------|
+| Saisie libre             | Affichage en temps réel dans le champ                        |
+| Touche Entrée            | Envoi du message (équivalent bouton envoi)                   |
+| Maj + Entrée             | Saut de ligne (si multi-ligne activé)                        |
+| Champ vide + Entrée      | Aucune action — bouton envoi désactivé                       |
+| Après envoi              | Champ vidé automatiquement, focus maintenu                   |
 
 ### Règles
 
-- Le champ est vidé après chaque envoi réussi.
-- Shift + Entrée insère un saut de ligne sans envoyer.
-- Le champ est désactivé pendant le traitement de la réponse de l'assistant
-  (indicateur de chargement visible).
-- Les emojis sont acceptés mais non interprétés sémantiquement en V1.
+- Le champ est toujours actif tant que la session est ouverte.
+- Aucune auto-complétion ni suggestion de frappe prédictive en V1.
+- La saisie est désactivée pendant le traitement de la réponse (indicateur
+  de chargement actif, DEP-0388).
 
 ---
 
@@ -556,24 +470,29 @@ son message à destination de l'assistant.
 
 ### Objectif
 
-Définir les caractéristiques du bouton qui permet au client d'envoyer son
-message à l'assistant.
+Définir le bouton permettant au client d'envoyer son message à l'assistant.
 
-### Spécifications
+### Structure
 
-| Attribut              | Valeur                                                     |
-|-----------------------|------------------------------------------------------------|
-| Libellé               | Icône « envoyer » (flèche) + label ARIA « Envoyer »        |
-| Position              | À droite du champ de saisie (DEP-0389)                     |
-| État actif            | Quand le champ de saisie contient au moins un caractère    |
-| État désactivé        | Quand le champ est vide ou pendant le traitement           |
-| Feedback visuel       | Indicateur de chargement pendant le traitement de l'envoi  |
+| Attribut     | Valeur                                                          |
+|--------------|-----------------------------------------------------------------|
+| Forme        | Bouton carré compact, icône flèche envoi (→ ou ↑)              |
+| Emplacement  | À droite du champ de saisie, dans la zone saisie               |
+| Couleur      | `--color-primary` (actif) / grisé (inactif)                    |
+| Label        | Icône uniquement (pas de texte), `aria-label="Envoyer"`        |
 
-### Règles
+### États
 
-- Le bouton est désactivé si le champ est vide (pas d'envoi de message vide).
-- Le même comportement que la touche Entrée (DEP-0389).
-- Le bouton est accessible au clavier (focusable, activable via Espace/Entrée).
+| État        | Condition                        | Apparence                    |
+|-------------|----------------------------------|------------------------------|
+| Actif       | Champ de saisie non vide         | Couleur primaire, cliquable  |
+| Inactif     | Champ de saisie vide             | Grisé, non cliquable         |
+| Chargement  | Réponse en cours de traitement   | Spinner ou désactivé          |
+
+### Comportement
+
+- Clic → envoi du message → vidage du champ → indicateur de chargement.
+- Le bouton est désactivé tant que la réponse précédente n'est pas reçue.
 
 ---
 
@@ -581,34 +500,39 @@ message à l'assistant.
 
 ### Objectif
 
-Définir les caractéristiques du bouton micro permettant au client d'activer
-la dictée vocale dans le mode assisté écran (saisie vocale → texte).
+Définir le bouton micro permettant au client d'activer la saisie vocale dans
+le mode assisté (réservé au mode assisté, absent du mode manuel).
 
-### Statut V1
+### Structure
 
-> Ce bouton est **présent dans l'interface** mais son activation dépend de
-> la disponibilité de l'API Web Speech du navigateur. Il est visible et
-> fonctionnel sur les navigateurs compatibles ; il est masqué ou désactivé
-> sur les navigateurs non compatibles.
+| Attribut     | Valeur                                                          |
+|--------------|-----------------------------------------------------------------|
+| Forme        | Bouton carré compact, icône micro 🎤                            |
+| Emplacement  | À droite du bouton envoi, dans la zone saisie                  |
+| Couleur      | `--color-neutral` (inactif) / `--color-accent` (en écoute)     |
+| Label        | Icône uniquement, `aria-label="Activer le micro"`              |
 
-### Spécifications
+### États
 
-| Attribut              | Valeur                                                        |
-|-----------------------|---------------------------------------------------------------|
-| Icône                 | Microphone                                                    |
-| Position              | À gauche du champ de saisie ou à droite du bouton d'envoi    |
-| Label ARIA            | « Dicter un message »                                        |
-| État actif (écoute)   | Icône animée (pulsation) + fond coloré                       |
-| État inactif          | Icône statique, fond neutre                                  |
-| Comportement          | Clic → active la dictée ; dictée terminée → texte injecté dans le champ |
+| État        | Condition                  | Apparence                             |
+|-------------|----------------------------|---------------------------------------|
+| Disponible  | Micro non actif            | Icône neutre, cliquable               |
+| En écoute   | Micro actif (enregistrement)| Icône colorée + animation pulse       |
+| Traitement  | Audio en cours de traitement| Spinner, désactivé                   |
+| Indisponible| Permissions micro refusées | Icône grisée + tooltip explicatif     |
+
+### Comportement
+
+- Clic → demande de permission micro (si non accordée).
+- Permission accordée → démarrage de l'enregistrement.
+- Fin de l'énoncé détectée (silence > 1,5s) → arrêt automatique + transcription.
+- La transcription est injectée dans le champ de saisie (DEP-0389) avant envoi.
+- Le client peut modifier la transcription avant d'envoyer.
 
 ### Règles
 
-- La dictée vocale remplace la saisie clavier : le texte dicté apparaît
-  dans le champ de saisie (DEP-0389) et peut être modifié avant envoi.
-- L'envoi n'est **pas automatique** après dictée : le client valide toujours.
-- Si le navigateur ne supporte pas la dictée, le bouton n'est pas affiché.
-- Aucune donnée vocale n'est stockée par l'assistant en V1.
+- Ce bouton est **absent en mode manuel** (DEP-0321).
+- Pas d'envoi automatique de la transcription sans action du client.
 
 ---
 
@@ -616,34 +540,33 @@ la dictée vocale dans le mode assisté écran (saisie vocale → texte).
 
 ### Objectif
 
-Définir comment l'assistant affiche les suggestions de produits dans la boîte
-de chat lorsqu'il propose des options au client.
+Définir comment l'assistant affiche les produits qu'il suggère en réponse
+à une demande ou une clarification.
 
-### Format d'affichage
+### Structure des suggestions
 
-Chaque suggestion produit affichée par l'assistant contient :
+| Attribut            | Valeur                                                        |
+|---------------------|---------------------------------------------------------------|
+| Emplacement desktop | Section suggestions (DEP-0185), sous le panier               |
+| Emplacement mobile  | Bandeau horizontal scrollable au-dessus de la zone saisie    |
+| Format              | Cartes produits compactes (mini-version de DEP-0330)          |
+| Nombre affiché      | 2 à 4 suggestions maximum                                     |
+| Contenu d'une carte | Photo, nom, prix, bouton « Ajouter »                         |
 
-| Élément           | Description                                         |
-|-------------------|-----------------------------------------------------|
-| Nom du produit    | Nom complet tel qu'il apparaît dans le catalogue    |
-| Format / contenance | Ex. : 200 g, 33 cl, 1 L                           |
-| Prix TTC          | Prix exact issu du catalogue (aucun prix inventé)   |
-| Image miniature   | Si disponible dans le catalogue (optionnel en V1)   |
-| Bouton d'action   | « Ajouter » ou « Choisir »                         |
+### Comportement
 
-### Règles de présentation
+- Les suggestions apparaissent après une réponse de l'assistant qui identifie
+  des produits (recherche, clarification, populaires).
+- Elles remplacent les suggestions précédentes à chaque nouveau résultat.
+- Elles sont effacées après sélection (DEP-0394) ou mise à jour du panier
+  (DEP-0395).
 
-- Maximum **4 suggestions** affichées simultanément en V1.
-- Si plus de 4 résultats existent, l'assistant indique qu'il peut affiner
-  et invite le client à préciser.
-- Les suggestions sont des **boutons cliquables** (→ DEP-0393).
-- Les données (nom, prix) sont issues du catalogue en temps réel.
-- L'assistant n'affiche jamais un produit absent du catalogue.
+### Règles
 
-### Règles d'accessibilité
-
-- Chaque suggestion est focusable au clavier.
-- Le nom du produit et le prix sont lus par les lecteurs d'écran.
+- Les suggestions affichées sont exclusivement des produits du catalogue actif.
+- L'assistant n'affiche jamais un produit sans `id` valide dans le catalogue.
+- Les produits en rupture peuvent apparaître dans les suggestions mais leur
+  bouton « Ajouter » est désactivé (DEP-0326).
 
 ---
 
@@ -651,29 +574,30 @@ Chaque suggestion produit affichée par l'assistant contient :
 
 ### Objectif
 
-Définir ce qui se passe lorsque le client clique sur une suggestion de produit
-affichée par l'assistant (DEP-0392).
+Définir le comportement déclenché quand le client clique sur une carte
+de suggestion.
 
-### Comportement
+### Zones de clic
 
-1. Le client clique sur une suggestion (ou l'active au clavier).
-2. L'assistant déclenche `ACTION_ADD_TO_CART` pour ce produit avec quantité 1
-   (ou la quantité précédemment mentionnée dans la session si applicable).
-3. Le panier est mis à jour (→ DEP-0395 pour la fermeture des suggestions).
-4. L'assistant confirme l'ajout dans la boîte de chat avec un message court.
-5. Les autres suggestions sont réduites (→ DEP-0394).
+| Zone cliquée           | Action déclenchée                                  |
+|------------------------|----------------------------------------------------|
+| Corps de la carte      | `ACTION_SHOW_PRODUCT` — ouverture du détail        |
+| Bouton « Ajouter »     | `ACTION_ADD_TO_CART` — ajout direct au panier      |
 
-### Message de confirmation
+### Comportement après clic « Ajouter »
 
-> « ✅ [Nom du produit] ajouté à ton panier. »
+1. Ajout de 1 unité au panier.
+2. Animation flyout vers l'icône panier.
+3. Badge panier incrémenté.
+4. Réduction des suggestions (DEP-0394).
+5. L'assistant confirme dans le chat (DEP-0369).
 
 ### Règles
 
-- Un seul clic suffit — pas de double confirmation requise.
-- Si le produit n'est plus disponible au moment du clic (rupture de stock
-  survenue entre-temps), l'assistant informe le client et retire la suggestion.
-- L'action est irréversible sans action explicite du client (mais le client
-  peut retirer le produit — DEP-0382).
+- Le comportement est identique à un ajout depuis la grille produits
+  (DEP-0331).
+- Le client n'est pas obligé de cliquer sur une suggestion — il peut continuer
+  à taper dans le chat.
 
 ---
 
@@ -681,27 +605,24 @@ affichée par l'assistant (DEP-0392).
 
 ### Objectif
 
-Définir le comportement de l'affichage des suggestions une fois qu'un produit
-a été sélectionné par le client.
+Définir ce qui se passe avec la zone de suggestions après qu'un produit a
+été sélectionné ou ajouté.
 
 ### Comportement
 
-1. Le client clique sur une suggestion (DEP-0393).
-2. Les suggestions non sélectionnées sont **réduites visuellement** :
-   disparaissent ou passent en état réduit/grisé.
-3. Seule la suggestion sélectionnée reste visible brièvement, accompagnée
-   du message de confirmation.
-4. Après 2 secondes, les suggestions disparaissent et la boîte de chat
-   revient à l'état conversationnel normal.
+| Action du client                    | Résultat sur les suggestions                              |
+|-------------------------------------|-----------------------------------------------------------|
+| Clic « Ajouter » sur une suggestion | La suggestion cliquée disparaît, les autres restent       |
+| Ajout de tous les produits suggérés | Zone de suggestions vidée                                 |
+| Nouvelle demande dans le chat       | Zone de suggestions remplacée par les nouveaux résultats  |
+| Clic sur le corps (voir détail)     | Suggestions maintenues pendant l'ouverture du modal       |
 
 ### Règles
 
-- La réduction est animée (transition douce, < 300 ms) pour ne pas désorienter.
-- Si le client souhaite voir les autres suggestions après sélection, il peut
-  reposer sa question.
-- Les suggestions disparaissent complètement une fois le panier mis à jour
-  (→ DEP-0395).
-- La réduction ne vide pas l'historique de conversation.
+- La réduction est animée (fade-out 150ms sur la carte retirée).
+- Si une seule suggestion reste après réduction, elle reste affichée.
+- La zone de suggestions n'est jamais vide avec un contenu partiel — si
+  toutes les suggestions sont sélectionnées, la zone disparaît complètement.
 
 ---
 
@@ -709,24 +630,30 @@ a été sélectionné par le client.
 
 ### Objectif
 
-Définir le déclencheur automatique de fermeture des suggestions produits
-lorsque le panier est mis à jour.
+Définir les conditions dans lesquelles la zone de suggestions se ferme
+automatiquement suite à une mise à jour du panier.
 
-### Comportement
+### Déclencheurs de fermeture automatique
 
-1. Le panier est mis à jour (ajout, retrait, modification de quantité).
-2. Les suggestions actives dans la boîte de chat sont automatiquement fermées.
-3. L'assistant affiche le message de confirmation de l'action panier.
-4. La boîte de chat reste ouverte et prête pour la prochaine interaction.
+| Déclencheur                              | Résultat                              |
+|------------------------------------------|---------------------------------------|
+| Ajout d'un produit via l'assistant       | Fermeture après animation flyout      |
+| Ajout d'un produit via la grille         | Fermeture immédiate des suggestions   |
+| Retrait d'un produit du panier           | Les suggestions restent affichées     |
+| Vidage complet du panier                 | Les suggestions restent affichées     |
+| Validation de la commande               | Fermeture + réinitialisation des suggestions |
+
+### Animation de fermeture
+
+- Fade-out de la zone de suggestions (200ms).
+- La zone disparaît visuellement avant que le bandeau s'effondre (collapse
+  animé 150ms).
 
 ### Règles
 
-- La fermeture est déclenchée par **toute mise à jour du panier**, qu'elle
-  provienne d'un clic sur une suggestion ou d'une action directe dans la boutique.
-- La fermeture est immédiate (sans délai de grâce) une fois le panier confirmé.
-- Elle ne ferme pas la boîte de chat elle-même — seulement le bloc de suggestions.
-- Si une liste de suggestions est affichée et que le client met à jour le panier
-  manuellement (hors clic suggestion), les suggestions se ferment également.
+- La fermeture n'efface pas l'historique du chat.
+- Le client peut demander à nouveau des suggestions en tapant une nouvelle
+  demande.
 
 ---
 
@@ -734,33 +661,32 @@ lorsque le panier est mis à jour.
 
 ### Objectif
 
-Définir la règle de garde fondamentale interdisant à l'assistant de proposer,
-suggérer ou confirmer un produit qui n'existe pas dans le catalogue actif.
+Valider que l'assistant texte ne génère jamais le nom, la description ou
+les caractéristiques d'un produit non présent dans le catalogue actif du
+tenant.
 
-### Règle
+### Règle fondamentale
 
-> **L'assistant ne peut jamais afficher, proposer, ajouter ou confirmer un
-> produit qui n'est pas présent et disponible dans le catalogue en temps réel.**
+> L'assistant ne connaît que ce que le catalogue lui fournit. Il ne complète
+> pas, n'invente pas, ne génère pas de données produit.
 
-### Mécanisme de vérification
+### Vérifications
 
-1. Avant toute suggestion ou action produit, l'assistant interroge le catalogue.
-2. Si le produit n'existe pas, il informe le client qu'il n'est pas disponible.
-3. Il peut proposer des alternatives existantes si elles sont pertinentes.
-4. Il ne génère jamais de nom de produit fictif.
+| Vérification                                         | Résultat attendu                               |
+|------------------------------------------------------|------------------------------------------------|
+| Produit demandé présent dans le catalogue            | ✅ Affiché via `ACTION_SHOW_PRODUCT`           |
+| Produit demandé absent du catalogue                  | ✅ DEP-0370 — refus + alternative proposée     |
+| Produit demandé retiré (archivé, DEP-0251)           | ✅ Traité comme absent — DEP-0370              |
+| Assistant invente un produit non référencé           | ❌ Comportement interdit — violation DEP-0363  |
+| Assistant décrit un produit avec des données erronées| ❌ Comportement interdit — violation DEP-0363  |
 
-### Cas de violation (interdits)
+### Mécanisme de contrôle
 
-| Situation                                   | Comportement interdit               |
-|---------------------------------------------|-------------------------------------|
-| Client demande un produit absent            | ❌ Ne jamais affirmer qu'il existe  |
-| Recherche retourne 0 résultat               | ❌ Ne jamais inventer un résultat   |
-| Catalogue non disponible (erreur technique) | ❌ Ne jamais utiliser un cache périmé comme vérité |
-
-### Comportement attendu en cas de produit absent
-
-> « Ce produit n'est pas disponible dans notre catalogue pour le moment. »
-> (+ proposition d'alternatives si applicable)
+- Toute référence à un produit dans une réponse de l'assistant doit provenir
+  d'un `id` de produit ou de variante valide dans le catalogue (DEP-0242,
+  DEP-0243).
+- L'assistant ne génère pas de texte libre décrivant un produit — il utilise
+  les champs `label`, `brand`, `description` du catalogue.
 
 ---
 
@@ -768,33 +694,30 @@ suggérer ou confirmer un produit qui n'existe pas dans le catalogue actif.
 
 ### Objectif
 
-Définir la règle de garde interdisant à l'assistant d'afficher, de mentionner
-ou de confirmer un prix qui n'est pas issu directement du catalogue en temps réel.
+Valider que l'assistant texte n'affiche ni ne suggère jamais un prix qui ne
+provient pas directement de la boutique.
 
-### Règle
+### Règle fondamentale
 
-> **L'assistant ne peut jamais afficher ni mentionner un prix qui n'est pas
-> fourni par le catalogue au moment de l'interaction.**
+> Les prix affichés dans l'interface de l'assistant sont toujours ceux de
+> la boutique. L'assistant ne calcule pas, n'estime pas, ne génère pas de prix.
 
-### Mécanisme de vérification
+### Vérifications
 
-1. Chaque prix affiché dans les suggestions (DEP-0392) est lu depuis le catalogue.
-2. L'assistant ne calcule jamais un prix manuellement.
-3. L'assistant ne mémorise pas les prix entre sessions.
-4. En cas d'absence de prix dans le catalogue, il affiche « Prix non disponible »
-   et n'invente pas de valeur.
+| Vérification                                       | Résultat attendu                                   |
+|----------------------------------------------------|----------------------------------------------------|
+| Prix affiché dans une suggestion                   | ✅ Provient de la variante du catalogue (DEP-0255)  |
+| Assistant cite un prix en réponse textuelle        | ❌ Comportement interdit — le prix est sur la carte |
+| Prix affiché après changement de variante          | ✅ Mis à jour depuis la boutique                    |
+| Prix calculé par l'assistant (total panier, etc.)  | ❌ Comportement interdit — le total est dans le panier|
 
-### Cas de violation (interdits)
+### Règles
 
-| Situation                                   | Comportement interdit                     |
-|---------------------------------------------|-------------------------------------------|
-| Prix absent dans le catalogue               | ❌ Ne jamais afficher un prix supposé     |
-| Calcul de promotion non confirmée           | ❌ Ne jamais appliquer une remise non officielle |
-| Cache périmé                                | ❌ Ne jamais afficher un prix expiré comme valide |
-
-### Comportement attendu si prix absent
-
-> Afficher « — » ou « Prix non disponible » à la place du montant.
+- L'assistant ne mentionne jamais un montant en euros ou en dollars dans ses
+  phrases texte.
+- Le prix est exclusivement affiché dans les composants visuels de la boutique
+  (carte produit, modal détail, panier).
+- En cas de doute, l'assistant oriente vers la carte produit ou le panier.
 
 ---
 
@@ -802,31 +725,31 @@ ou de confirmer un prix qui n'est pas issu directement du catalogue en temps ré
 
 ### Objectif
 
-Valider que l'assistant respecte son rôle d'interface conversationnelle en
-déléguant toujours l'exécution aux composants de la boutique, sans substituer
-ses propres réponses à l'état réel de la boutique.
+Valider que l'assistant texte agit toujours comme un pilote de l'interface
+existante, et ne substitue jamais ses propres réponses textuelles à des
+composants de la boutique.
 
-### Principe à valider
+### Principe
 
-> **L'assistant pilote. La boutique exécute. Le client valide.**
-> (Référence : DEP-0361)
+> L'assistant **déclenche** des actions dans la boutique.
+> Il ne **simule** pas la boutique par du texte.
 
 ### Vérifications
 
-| Comportement à valider                                      | Résultat attendu                               |
-|-------------------------------------------------------------|------------------------------------------------|
-| Ajout au panier via l'assistant                             | ✅ Panier mis à jour dans la boutique réelle   |
-| Filtrage via l'assistant                                    | ✅ Filtre appliqué sur la page boutique réelle |
-| Affichage d'un produit via l'assistant                      | ✅ Fiche produit ouverte dans la boutique réelle|
-| L'assistant affiche son propre inventaire                   | ❌ Interdit — pas de catalogue interne         |
-| L'assistant gère son propre panier                          | ❌ Interdit — seul le panier boutique fait foi |
-| L'assistant confirme une commande sans passer par la boutique| ❌ Interdit — la boutique valide toujours      |
+| Comportement attendu                                     | Résultat attendu                              |
+|----------------------------------------------------------|-----------------------------------------------|
+| Afficher un produit → déclenche `ACTION_SHOW_PRODUCT`    | ✅ Fiche produit affichée dans la boutique    |
+| Ajouter au panier → déclenche `ACTION_ADD_TO_CART`       | ✅ Panier mis à jour dans la boutique         |
+| Montrer le panier → déclenche `ACTION_SHOW_CART`         | ✅ Panier ouvert dans la boutique             |
+| Assistant décrit le panier en texte libre                | ❌ Comportement interdit                      |
+| Assistant liste les produits en texte libre              | ❌ Comportement interdit                      |
+| Assistant confirme une commande sans passer par l'écran  | ❌ Comportement interdit                      |
 
-### Règle de fond
+### Règles
 
-- Toute action visible résultant d'une interaction avec l'assistant doit être
-  **reflétée dans les composants visuels de la boutique** en temps réel.
-- L'assistant n'a pas d'état propre pour le catalogue, les prix ou le panier.
+- Chaque réponse de l'assistant qui concerne un produit, un prix ou le panier
+  doit être accompagnée d'une action sur la boutique (DEP-0362).
+- Le texte de l'assistant complète l'action — il ne la remplace pas.
 
 ---
 
@@ -834,72 +757,107 @@ ses propres réponses à l'état réel de la boutique.
 
 ### Objectif
 
-Valider que l'assistant déclenche des **actions structurées** (appels de
-fonctions définis) pour toute interaction avec la boutique, sans jamais se
-contenter de produire du texte libre non actionnable.
+Valider que les réponses de l'assistant déclenchent systématiquement des
+fonctions structurées de la boutique, et non du texte libre sans effet sur
+l'interface.
 
-### Principe à valider
+### Principe
 
-> **Chaque réponse de l'assistant qui modifie l'état de la boutique passe par
-> un appel de fonction structuré, jamais par du texte libre interprété côté client.**
-
-### Actions structurées attendues (référence DEP-0362)
-
-| Action                  | Déclencheur textuel exemple             |
-|-------------------------|-----------------------------------------|
-| `ACTION_SEARCH`         | « cherche », « trouve »                 |
-| `ACTION_FILTER`         | catégorie, marque, parfum identifiés    |
-| `ACTION_ADD_TO_CART`    | « ajoute », sélection d'une suggestion  |
-| `ACTION_UPDATE_QTY`     | correction de quantité                  |
-| `ACTION_SHOW_CART`      | « mon panier », « ce que j'ai »         |
-| `ACTION_SHOW_LAST_ORDER`| « ma dernière commande »                |
-| `ACTION_SHOW_POPULAR`   | « les plus commandés », « populaires »  |
+> Chaque intention identifiée par l'assistant produit une action codifiée
+> (DEP-0362), jamais une réponse narrative sans effet.
 
 ### Vérifications
 
-| Comportement à valider                                            | Résultat attendu                            |
-|-------------------------------------------------------------------|---------------------------------------------|
-| Ajout demandé → appel `ACTION_ADD_TO_CART`                       | ✅ Fonction appelée, panier mis à jour      |
-| Filtre demandé → appel `ACTION_FILTER`                           | ✅ Fonction appelée, page filtrée           |
-| Réponse textuelle sans action si aucune action applicable        | ✅ Texte uniquement, pas de fausse action   |
-| Texte libre qui prétend avoir ajouté un produit sans l'ajouter   | ❌ Interdit — action réelle requise         |
+| Intention détectée           | Réponse attendue                                             |
+|------------------------------|--------------------------------------------------------------|
+| Chercher un produit          | `ACTION_SEARCH` + résultats dans la grille                   |
+| Ajouter un produit           | `ACTION_ADD_TO_CART` + feedback visuel                       |
+| Voir le panier               | `ACTION_SHOW_CART` + panier ouvert                           |
+| Afficher les populaires      | `ACTION_SHOW_POPULAR` + grille filtrée                       |
+| Confirmer la commande        | `ACTION_CONFIRM_ORDER` + redirection récapitulatif           |
+| Demande hors périmètre       | Phrase DEP-0371 + aucune action déclenchée                   |
+
+### Règles
+
+- Toute intention reconnue déclenche une action listée dans DEP-0362.
+- Les phrases de l'assistant (DEP-0367–DEP-0376) accompagnent les actions —
+  elles ne les remplacent pas.
+- Si aucune action n'est disponible pour une intention → l'assistant l'indique
+  explicitement et ne tente pas de simuler un résultat.
 
 ---
 
-## DEP-0400 — Geler le comportement V1 de l'assistant texte
+## DEP-0400 — Gel du comportement V1 de l'assistant texte
 
 ### Objectif
 
-Confirmer que le comportement V1 complet de l'assistant texte (DEP-0361 à
-DEP-0399) est **complet, cohérent et gelé**. Aucune modification ne doit être
-apportée sans une décision explicite documentée par un nouveau DEP.
+Confirmer que l'ensemble du comportement de l'assistant texte (DEP-0361 à
+DEP-0399) est **complet, cohérent et gelé**. Aucune modification ne doit
+être apportée sans une décision explicite documentée.
 
 ### Périmètre gelé
 
-| Bloc          | Contenu                                                                  |
-|---------------|--------------------------------------------------------------------------|
-| DEP-0361–0370 | Rôle, actions autorisées, limites, ton, interlocuteurs                   |
-| DEP-0371–0376 | Phrases système canoniques (accueil, refus, relance, confirmation, fin)  |
-| DEP-0377–0387 | Logiques de compréhension (intents simples, corrections, ambiguïtés)     |
-| DEP-0388–0395 | Composants UI du chat (boîte, saisie, boutons, suggestions, interactions)|
-| DEP-0396–0399 | Garde-fous comportementaux (catalogue, prix, pilotage, fonctions)        |
+| Bloc           | Contenu                                                             |
+|----------------|---------------------------------------------------------------------|
+| DEP-0361–0366  | Rôle, actions autorisées/interdites, tons par interlocuteur         |
+| DEP-0367–0376  | Phrases système canoniques (bienvenue → fin de conversation)        |
+| DEP-0377–0387  | Logiques de compréhension (catégorie, marque, parfum, quantité, corrections, ambiguïtés) |
+| DEP-0388–0395  | Composants UI (boîte chat, saisie, envoi, micro, suggestions)       |
+| DEP-0396–0399  | Validations comportementales (pas d'invention, pilotage boutique)   |
 
 ### Règles du gel
 
-- **Aucune modification** des spécifications DEP-0361 à DEP-0399 sans nouveau
-  DEP dédié documentant la décision.
-- Les implémentations futures doivent respecter ces spécifications telles quelles.
-- Les ajouts de comportement (mémoire inter-sessions, mode multilingue,
-  suggestions proactives) feront l'objet de nouveaux blocs DEP au-delà de DEP-0400.
+- **Aucune modification** des spécifications DEP-0361 à DEP-0399 sans nouvelle
+  décision documentée (nouveau DEP dédié).
+- Les implémentations futures doivent respecter ces spécifications telles
+  quelles.
+- Toute extension (nouvelles logiques de compréhension, nouveaux composants UI,
+  support multilingue, historique persistant) fera l'objet de nouveaux blocs
+  DEP au-delà de DEP-0400.
 - Tout écart constaté lors de l'implémentation doit être signalé et arbitré
-  avant modification.
+  avant toute modification.
 
 ### Critères de gel validés
 
-| Critère                                               | Statut  |
-|-------------------------------------------------------|---------|
-| Toutes les logiques de compréhension sont définies    | ✅ Fait |
-| Tous les composants UI du chat sont spécifiés         | ✅ Fait |
-| Tous les garde-fous comportementaux sont documentés   | ✅ Fait |
-| Le périmètre gelé est explicitement listé             | ✅ Fait |
-| Le lien avec DEP-0361–0376 est établi                 | ✅ Fait |
+| Critère                                                   | Statut   |
+|-----------------------------------------------------------|----------|
+| Rôle et périmètre de l'assistant définis                  | ✅ Fait   |
+| Actions autorisées et interdites listées exhaustivement   | ✅ Fait   |
+| Tons par interlocuteur définis                            | ✅ Fait   |
+| Phrases système canoniques définies                       | ✅ Fait   |
+| Logiques de compréhension définies                        | ✅ Fait   |
+| Logiques d'ambiguïté définies                             | ✅ Fait   |
+| Composants UI de l'assistant définis                      | ✅ Fait   |
+| Validations comportementales documentées                  | ✅ Fait   |
+| Périmètre gelé explicitement listé                        | ✅ Fait   |
+
+---
+
+## Synthèse du bloc DEP-0377–DEP-0400
+
+| DEP      | Sujet                                   | Décision clé                                               |
+|----------|-----------------------------------------|------------------------------------------------------------|
+| DEP-0377 | Compréhension catégorie                 | Match sur label/tags/synonymes, une catégorie active       |
+| DEP-0378 | Compréhension marque                    | Match sur brand/synonymes, aucune invention de marque      |
+| DEP-0379 | Compréhension parfum                    | Modificateur de variante, variante par défaut si absent    |
+| DEP-0380 | Compréhension quantité                  | 1 par défaut, vague → clarification, max 99 en V1          |
+| DEP-0381 | Compréhension correction                | Mots-clés de correction, annule action précédente seulement|
+| DEP-0382 | Compréhension retrait                   | ACTION_UPDATE_QTY à 0, vidage total avec confirmation      |
+| DEP-0383 | Compréhension remplacement              | Retrait puis ajout, même quantité, produit dispo requis    |
+| DEP-0384 | Commande incomplète                     | 3 vérifications avant ACTION_CONFIRM_ORDER, une à la fois  |
+| DEP-0385 | Ambiguïté chips ketchup / multi-marques | Max 4 marques proposées, client choisit toujours           |
+| DEP-0386 | Ambiguïté Pepsi / multi-formats         | Variante par défaut proposée en premier, max 3 formats     |
+| DEP-0387 | Ambiguïté lait / multi-sortes           | Axe de distinction le plus significatif d'abord            |
+| DEP-0388 | Boîte de chat                           | Section droite desktop, panneau mobile, historique session |
+| DEP-0389 | Entrée texte                            | 280 chars max, Entrée = envoi, désactivée pendant traitement|
+| DEP-0390 | Bouton envoi                            | Inactif si champ vide, désactivé pendant traitement        |
+| DEP-0391 | Bouton micro                            | Mode assisté uniquement, transcription → champ saisie      |
+| DEP-0392 | Affichage suggestions                   | 2–4 cartes compactes, produits catalogue exclusivement     |
+| DEP-0393 | Clic sur suggestion                     | Corps → détail, bouton → ajout direct, même logique grille |
+| DEP-0394 | Réduction suggestions après sélection   | Carte cliquée retire, autres restent, zone vide disparaît  |
+| DEP-0395 | Fermeture suggestions / panier          | Auto après ajout assistant, manuelle après ajout grille    |
+| DEP-0396 | Validation — pas d'invention produit    | Tout produit = id valide du catalogue, jamais de texte libre|
+| DEP-0397 | Validation — pas d'invention prix       | Prix toujours de la boutique, jamais cité en texte         |
+| DEP-0398 | Validation — pilote la boutique         | Chaque réponse → action boutique, pas de simulation texte  |
+| DEP-0399 | Validation — fonctions structurées      | Toute intention → action DEP-0362, pas de narratif libre   |
+| DEP-0400 | Gel comportement V1 assistant texte     | DEP-0361–0399 gelés, toute extension = nouveau bloc DEP    |
