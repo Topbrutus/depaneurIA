@@ -118,7 +118,7 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [x] DEP-0100 Créer un modèle d’issue GitHub pour les idées produit.
 - [x] DEP-0101 Créer un modèle de pull request GitHub.
 - [x] DEP-0102 Créer la branche principale stable.
-- [x] DEP-0103 Créer une branche de développement.
+- [ ] DEP-0103 Créer une branche de développement.
 - [x] DEP-0104 Définir la règle de nommage des branches.
 - [x] DEP-0105 Définir la règle de nommage des commits.
 - [x] DEP-0106 Définir la règle de nommage des tags de version.
