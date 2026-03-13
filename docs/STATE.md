@@ -8,35 +8,34 @@
 - Code produit : pas commencé
 - Système de suivi à trois : en place
 - Problème principal client formulé : commande lente et incertaine (infos répétées, disponibilité inconnue)
-- Branche `develop` : absente (création bloquée faute d’accès push GitHub)
+- Branche `develop` : créée et alignée sur `main`
+- Protection `main` : active (PR obligatoire, suppression interdite, 1 revue, branches à jour, status checks requis)
+- Projet GitHub : `DépannVite` (Board) avec colonnes À faire, En cours, En revue, Terminé, Bloqué
+- Labels personnalisés créés : DEP-0112 à DEP-0119 (domaines, priorités, risques, V1/V2, blocages)
+- Premier commit de base enregistré
 
 ## Bloc actif recommandé
 
-- Bloc GitHub de fondation : nommage complété, branche `develop` à créer depuis `main`
-- Prochain bloc recommandé : `DEP-0107` à `DEP-0110` (gouvernance GitHub)
+- Blocs GitHub de fondation (`DEP-0084` à `DEP-0120`) terminés
+- Prochain bloc recommandé : `DEP-0121` à `DEP-0130` (choix stack, outils de qualité, règles de code)
 
 ## Observation importante
 
-Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0106) est en cours : README, LICENSE, .gitignore, dossier docs, CONTRIBUTING.md, CODEOWNERS, dossiers decisions/diagrams/prompts, modèles d'issue GitHub (bug, task, idée produit) et modèle de PR sont tous en place. Les dossiers de structure (apps, packages, infra, scripts, assets) sont présents. La branche `main` est présente ; la branche `develop` reste à créer (droits push requis). Les règles de nommage des branches, commits et tags de version sont documentées dans CONTRIBUTING.md.
+Le bloc 0001 (DEP-0001 à DEP-0010) reste complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0120) est maintenant achevé : README, LICENSE, .gitignore, dossiers structurants, CONTRIBUTING, CODEOWNERS, modèles d'issues/PR, branche `develop`, protection `main`, projet `DépannVite` (Board) et labels personnalisés sont en place. Les règles de nommage des branches, commits et tags de version sont documentées dans CONTRIBUTING.md.
 
 ## Manques publics actuels
 
-- DEP-0103 — branche `develop` absente (création bloquée faute d’accès GitHub)
-- DEP-0110 — projet GitHub non créé
-- DEP-0111 — colonnes du projet non créées
-- DEP-0112 à DEP-0119 — labels GitHub personnalisés non créés
+- DEP-0121 à DEP-0129 — choix officiels du stack (TypeScript, React, Node.js), du gestionnaire de paquets et des outils qualité à acter
 
 ## Prochaines actions suggérées
 
-1. Activer la protection de la branche `main` via GitHub UI (DEP-0107)
-2. Exiger des revues avant fusion via GitHub UI (DEP-0108)
-3. Exiger des vérifications automatiques avant fusion via GitHub UI (DEP-0109)
-4. Configurer GitHub Projects via GitHub UI (DEP-0110)
-5. Créer les labels manquants (DEP-0111 à DEP-0119) dès que les droits repo sont disponibles
+1. Trancher officiellement la stack cible (TypeScript, React, Node.js) et le modèle monorepo (DEP-0121 à DEP-0124)
+2. Choisir le gestionnaire de paquets et fixer les versions minimales Node.js/TypeScript (DEP-0125 à DEP-0127)
+3. Définir les outils et règles qualité (formatage, lint, qualité minimale) pour cadrer les prochains commits (DEP-0128 à DEP-0130)
 
 ## Vérifications à faire dans GitHub UI (admin requis)
 
-- DEP-0107 — Règle de protection `main` créée avec interdiction de suppression
+- DEP-0107 — Règle de protection `main` active avec interdiction de suppression
 - DEP-0108 — Au moins 1 revue obligatoire avant fusion sur `main`
 - DEP-0109 — Status checks requis et branche à jour avant fusion
 
@@ -74,15 +73,15 @@ Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fo
 
 ## Dernière tâche terminée
 
-- DEP-0106 — Règle de nommage des tags de version documentée dans CONTRIBUTING.md ; DEP-0102 à DEP-0105 également cochés
+- DEP-0110 à DEP-0120 — gouvernance GitHub finalisée (protection `main`, revues/checks requis, projet `DépannVite`, labels personnalisés, premier commit propre)
 
 ## En cours
 
-- Création de la branche `develop` (bloquée par absence d’accès push)
+- Préparation des décisions techniques et outillage qualité (DEP-0121 à DEP-0130)
 
 ## Bloqueurs
 
-- Droits d’écriture GitHub requis pour créer `develop`, activer la protection de `main`, configurer le projet et créer les labels
+- Aucun bloqueur identifié pour la suite documentaire (décisions techniques à prendre)
 
 ## Convention d'ID
 
