@@ -225,46 +225,46 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 
 ## Bloc 0201–0240
 
-- [ ] DEP-0201 Définir les couleurs principales de l’interface.
-- [ ] DEP-0202 Définir les couleurs secondaires de l’interface.
-- [ ] DEP-0203 Définir les couleurs d’état : succès, alerte, erreur, attente.
-- [ ] DEP-0204 Définir les couleurs d’accessibilité à contraste élevé.
-- [ ] DEP-0205 Définir la typographie principale.
-- [ ] DEP-0206 Définir la typographie secondaire.
-- [ ] DEP-0207 Définir l’échelle des titres.
-- [ ] DEP-0208 Définir l’échelle du corps de texte.
-- [ ] DEP-0209 Définir l’échelle des boutons.
-- [ ] DEP-0210 Définir l’échelle des cartes produits.
-- [ ] DEP-0211 Définir le style visuel des cartes produits.
-- [ ] DEP-0212 Définir le style visuel du panier.
-- [ ] DEP-0213 Définir le style visuel du chat assistant.
-- [ ] DEP-0214 Définir le style visuel des suggestions.
-- [ ] DEP-0215 Définir le style visuel des badges d’état de commande.
-- [ ] DEP-0216 Définir le style visuel des alertes du dépanneur.
-- [ ] DEP-0217 Définir le style visuel des alertes du livreur.
-- [ ] DEP-0218 Définir le style visuel des écrans de chargement.
-- [ ] DEP-0219 Définir les icônes minimales du système.
-- [ ] DEP-0220 Définir les animations minimales du système.
-- [ ] DEP-0221 Définir l’animation d’ajout au panier.
-- [ ] DEP-0222 Définir l’animation de retrait du panier.
-- [ ] DEP-0223 Définir l’animation d’ouverture des suggestions.
-- [ ] DEP-0224 Définir l’animation de fermeture des suggestions.
-- [ ] DEP-0225 Définir l’animation de changement d’état de commande.
-- [ ] DEP-0226 Définir l’animation d’alerte nouvelle commande.
-- [ ] DEP-0227 Définir l’animation d’alerte assignation livreur.
-- [ ] DEP-0228 Définir le composant bouton principal.
-- [ ] DEP-0229 Définir le composant bouton secondaire.
-- [ ] DEP-0230 Définir le composant champ de recherche.
-- [ ] DEP-0231 Définir le composant carte produit.
-- [ ] DEP-0232 Définir le composant miniature panier.
-- [ ] DEP-0233 Définir le composant message assistant.
-- [ ] DEP-0234 Définir le composant message client.
-- [ ] DEP-0235 Définir le composant tuile suggestion.
-- [ ] DEP-0236 Définir le composant indicateur d’état de livraison.
-- [ ] DEP-0237 Définir le composant carte dernière commande.
-- [ ] DEP-0238 Définir le composant carte top 10.
-- [ ] DEP-0239 Définir le composant modal de confirmation.
-- [ ] DEP-0240 Faire valider le système visuel de base avant de coder plus loin.
+- [x] DEP-0201 Définir les couleurs principales de l'interface.
+- [x] DEP-0202 Définir les couleurs secondaires de l'interface.
+- [x] DEP-0203 Définir les couleurs d'état : succès, alerte, erreur, attente.
+- [x] DEP-0204 Définir les couleurs d'accessibilité à contraste élevé.
+- [x] DEP-0205 Définir la typographie principale.
+- [x] DEP-0206 Définir la typographie secondaire.
+- [x] DEP-0207 Définir l'échelle des titres.
+- [x] DEP-0208 Définir l'échelle du corps de texte.
+- [x] DEP-0209 Définir l'échelle des boutons.
+- [x] DEP-0210 Définir l'échelle des cartes produits.
+- [x] DEP-0211 Définir le style visuel des cartes produits.
+- [x] DEP-0212 Définir le style visuel du panier.
+- [x] DEP-0213 Définir le style visuel du chat assistant.
+- [x] DEP-0214 Définir le style visuel des suggestions.
+- [x] DEP-0215 Définir le style visuel des badges d'état de commande.
+- [x] DEP-0216 Définir le style visuel des alertes du dépanneur.
+- [x] DEP-0217 Définir le style visuel des alertes du livreur.
+- [x] DEP-0218 Définir le style visuel des écrans de chargement.
+- [x] DEP-0219 Définir les icônes minimales du système.
+- [x] DEP-0220 Définir les animations minimales du système.
+- [x] DEP-0221 Définir l'animation d'ajout au panier.
+- [x] DEP-0222 Définir l'animation de retrait du panier.
+- [x] DEP-0223 Définir l'animation d'ouverture des suggestions.
+- [x] DEP-0224 Définir l'animation de fermeture des suggestions.
+- [x] DEP-0225 Définir l'animation de changement d'état de commande.
+- [x] DEP-0226 Définir l'animation d'alerte nouvelle commande.
+- [x] DEP-0227 Définir l'animation d'alerte assignation livreur.
+- [x] DEP-0228 Définir le composant bouton principal.
+- [x] DEP-0229 Définir le composant bouton secondaire.
+- [x] DEP-0230 Définir le composant champ de recherche.
+- [x] DEP-0231 Définir le composant carte produit.
+- [x] DEP-0232 Définir le composant miniature panier.
+- [x] DEP-0233 Définir le composant message assistant.
+- [x] DEP-0234 Définir le composant message client.
+- [x] DEP-0235 Définir le composant tuile suggestion.
+- [x] DEP-0236 Définir le composant indicateur d'état de livraison.
+- [x] DEP-0237 Définir le composant carte dernière commande.
+- [x] DEP-0238 Définir le composant carte top 10.
+- [x] DEP-0239 Définir le composant modal de confirmation.
+- [x] DEP-0240 Faire valider le système visuel de base avant de coder plus loin.
 
 ## Bloc 0241–0280
 
