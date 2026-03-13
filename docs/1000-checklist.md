@@ -540,26 +540,26 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [ ] DEP-0492 Définir la fiche détail d’une commande côté dépanneur.
 - [ ] DEP-0493 Définir l’action accepter une commande.
 - [ ] DEP-0494 Définir l’action refuser une commande.
-- [ ] DEP-0495 Définir l’action marquer en préparation.
-- [ ] DEP-0496 Définir l’action marquer prête.
-- [ ] DEP-0497 Définir l’action assigner à un livreur.
-- [ ] DEP-0498 Définir l’action annuler une commande.
-- [ ] DEP-0499 Définir l’action modifier une commande avant départ.
-- [ ] DEP-0500 Définir l’action appeler le client si nécessaire.
-- [ ] DEP-0501 Définir l’action envoyer un message automatique au client.
-- [ ] DEP-0502 Définir l’action signaler un article manquant.
-- [ ] DEP-0503 Définir l’action proposer un remplacement au client.
-- [ ] DEP-0504 Définir l’action marquer payé à la livraison.
-- [ ] DEP-0505 Définir l’action marquer non payé.
-- [ ] DEP-0506 Définir l’action marquer problème de livraison.
-- [ ] DEP-0507 Définir l’action rouvrir une commande si erreur.
-- [ ] DEP-0508 Définir la logique de priorité des commandes.
-- [ ] DEP-0509 Définir la logique d’horodatage de chaque changement d’état.
-- [ ] DEP-0510 Définir la logique de journal d’activité de la commande.
-- [ ] DEP-0511 Créer le tableau de bord de réception du dépanneur.
-- [ ] DEP-0512 Créer la vue détaillée d’une commande.
-- [ ] DEP-0513 Créer le bouton d’acceptation de commande.
-- [ ] DEP-0514 Créer le bouton de refus de commande.
+- [x] DEP-0495 Définir l’action marquer en préparation.
+- [x] DEP-0496 Définir l’action marquer prête.
+- [x] DEP-0497 Définir l’action assigner à un livreur.
+- [x] DEP-0498 Définir l’action annuler une commande.
+- [x] DEP-0499 Définir l’action modifier une commande avant départ.
+- [x] DEP-0500 Définir l’action appeler le client si nécessaire.
+- [x] DEP-0501 Définir l’action envoyer un message automatique au client.
+- [x] DEP-0502 Définir l’action signaler un article manquant.
+- [x] DEP-0503 Définir l’action proposer un remplacement au client.
+- [x] DEP-0504 Définir l’action marquer payé à la livraison.
+- [x] DEP-0505 Définir l’action marquer non payé.
+- [x] DEP-0506 Définir l’action marquer problème de livraison.
+- [x] DEP-0507 Définir l’action rouvrir une commande si erreur.
+- [x] DEP-0508 Définir la logique de priorité des commandes.
+- [x] DEP-0509 Définir la logique d’horodatage de chaque changement d’état.
+- [x] DEP-0510 Définir la logique de journal d’activité de la commande.
+- [x] DEP-0511 Créer le tableau de bord de réception du dépanneur.
+- [x] DEP-0512 Créer la vue détaillée d’une commande.
+- [x] DEP-0513 Créer le bouton d’acceptation de commande.
+- [x] DEP-0514 Créer le bouton de refus de commande.
 - [ ] DEP-0515 Créer le bouton “prête pour livraison”.
 - [ ] DEP-0516 Créer l’indicateur d’urgence si commande trop vieille.
 - [ ] DEP-0517 Créer le son d’alerte configurable.
