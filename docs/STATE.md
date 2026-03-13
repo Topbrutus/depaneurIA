@@ -68,25 +68,21 @@ Décisions documentées dans `docs/decisions/` :
 - DEP-0140 → `docs/decisions/DEP-0140-scripts-strategy.md`, `package.json` (scripts)
 - DEP-0141 → `scripts/dev.sh`, `package.json` (`pnpm dev`)
 
-## Bloc actif
-
-- **DEP-0142 à DEP-0160** — scripts manquants, règles de nommage, vérification locale, stabilisation
-
 ## Dernière tâche terminée
 
-- DEP-0121 à DEP-0141 — ossature technique complète (stack, configs, monorepo, env, scripts)
+- DEP-0121 à DEP-0160 — ossature technique complète (stack, configs, monorepo, env, scripts, conventions de nommage, vérification locale, stabilisation)
 
 ## En cours
 
-- DEP-0142 à DEP-0160 — compléter scripts, ajouter conventions de nommage, vérifier l'environnement local
+- Aucune tâche actuellement en cours
 
 ## Bloqueurs
 
 - Aucun bloqueur technique identifié
 
-## Prochain bloc recommandé (après DEP-0160)
+## Prochain bloc recommandé
 
-- **DEP-0161 à DEP-0170** — cartes du site et définition des pages (aucun code produit, uniquement documentation UX)
+- **DEP-0161 à DEP-0170** (BLOCK-017)
 
 ## Convention d'ID
 
