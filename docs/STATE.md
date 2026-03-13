@@ -8,15 +8,16 @@
 - Code produit : pas commencé
 - Système de suivi à trois : en place
 - Problème principal client formulé : commande lente et incertaine (infos répétées, disponibilité inconnue)
+- Branche `develop` : absente (création bloquée faute d’accès push GitHub)
 
 ## Bloc actif recommandé
 
-- Bloc GitHub de fondation : branches et nommage complétés
-- Prochain bloc recommandé : `DEP-0107` à `DEP-0110`
+- Bloc GitHub de fondation : nommage complété, branche `develop` à créer depuis `main`
+- Prochain bloc recommandé : `DEP-0107` à `DEP-0110` (gouvernance GitHub)
 
 ## Observation importante
 
-Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0106) est en cours : README, LICENSE, .gitignore, dossier docs, CONTRIBUTING.md, CODEOWNERS, dossiers decisions/diagrams/prompts, modèles d'issue GitHub (bug, task, idée produit) et modèle de PR sont tous en place. Les dossiers de structure (apps, packages, infra, scripts, assets) sont présents. Les branches `main` et `develop` sont créées. Les règles de nommage des branches, commits et tags de version sont documentées dans CONTRIBUTING.md.
+Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0106) est en cours : README, LICENSE, .gitignore, dossier docs, CONTRIBUTING.md, CODEOWNERS, dossiers decisions/diagrams/prompts, modèles d'issue GitHub (bug, task, idée produit) et modèle de PR sont tous en place. Les dossiers de structure (apps, packages, infra, scripts, assets) sont présents. La branche `main` est présente ; la branche `develop` reste à créer (droits push requis). Les règles de nommage des branches, commits et tags de version sont documentées dans CONTRIBUTING.md.
 
 ## Prochaines actions suggérées
 
@@ -24,6 +25,7 @@ Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fo
 2. Exiger des revues avant fusion via GitHub UI (DEP-0108)
 3. Exiger des vérifications automatiques avant fusion via GitHub UI (DEP-0109)
 4. Configurer GitHub Projects via GitHub UI (DEP-0110)
+5. Créer les labels manquants (DEP-0111 à DEP-0119) dès que les droits repo sont disponibles
 
 ## Consignes GitHub UI
 
@@ -63,11 +65,11 @@ Le bloc 0001 (DEP-0001 à DEP-0010) est maintenant complet. Le bloc GitHub de fo
 
 ## En cours
 
-- Aucune
+- Création de la branche `develop` (bloquée par absence d’accès push)
 
 ## Bloqueurs
 
-- Aucun connu
+- Droits d’écriture GitHub requis pour créer `develop`, activer la protection de `main`, configurer le projet et créer les labels
 
 ## Convention d'ID
 
