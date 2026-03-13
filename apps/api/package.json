@@ -1,0 +1,12 @@
+{
+  "name": "@depaneuria/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo '[api] dev: not yet wired' && exit 0",
+    "build": "echo '[api] build: not yet wired' && exit 0",
+    "lint": "echo '[api] lint: not yet wired' && exit 0",
+    "typecheck": "echo '[api] typecheck: not yet wired' && exit 0",
+    "test": "echo '[api] test: not yet wired' && exit 0"
+  }
+}
