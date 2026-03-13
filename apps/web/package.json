@@ -1,0 +1,12 @@
+{
+  "name": "@depaneuria/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo '[web] dev: not yet wired' && exit 0",
+    "build": "echo '[web] build: not yet wired' && exit 0",
+    "lint": "echo '[web] lint: not yet wired' && exit 0",
+    "typecheck": "echo '[web] typecheck: not yet wired' && exit 0",
+    "test": "echo '[web] test: not yet wired' && exit 0"
+  }
+}
