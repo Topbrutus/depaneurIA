@@ -446,7 +446,7 @@ zone de livraison est validée par rapport aux zones du tenant (DEP-0254).
 - La validation de la zone de livraison utilise les zones du tenant
   (DEP-0254) : si l'adresse est hors zone, l'erreur « Zone non desservie »
   est retournée (DEP-0311).
-- Les adresses sont **jamais partagées** entre tenants, même pour un même
+- Les adresses ne sont **jamais partagées** entre tenants, même pour un même
   client.
 - La suppression d'une adresse est un **soft delete** pour conserver
   l'historique des commandes.
