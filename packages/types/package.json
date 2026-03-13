@@ -1,0 +1,27 @@
+{
+  "name": "@depaneuria/types",
+  "version": "0.1.0",
+  "description": "Types partagés depaneurIA (client, adresses, sessions locales).",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "lint": "echo \"no lint for @depaneuria/types\"",
+    "test": "echo \"no tests for @depaneuria/types\""
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

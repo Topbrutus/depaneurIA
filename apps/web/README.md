@@ -1,39 +1,17 @@
-# apps/web — Interface utilisateur (Front-end)
+# apps/web — Parcours client local (Vite + React)
 
-## Rôle
+Front client minimal pour depaneurIA. Objectif : tester localement l’inscription, la connexion, le profil et les adresses sans dépendance backend.
 
-Application web client de depaneurIA.  
-Permet aux clients, dépanneurs et livreurs d'accéder au service via un navigateur.
+## Scripts utiles
 
-## Stack prévue
+- `pnpm dev:web` — démarre le front Vite.
+- `pnpm --filter @depaneuria/web build` — build + typecheck.
+- `pnpm --filter @depaneuria/web lint` — lint.
 
-- **Framework** : Next.js (React)
-- **Langage** : TypeScript strict
-- **Style** : Tailwind CSS (décision à venir)
-- **Gestion d'état** : à décider (Zustand ou React Query selon les besoins)
+## Parcours V1 gelé
 
-## Structure interne prévue
-
-```
-apps/web/
-├── public/              # Fichiers statiques
-├── src/
-│   ├── app/             # Routes (App Router Next.js)
-│   ├── components/      # Composants UI locaux
-│   ├── hooks/           # Hooks React locaux
-│   └── lib/             # Utilitaires locaux
-├── .env.example         # Variables d'environnement requises
-├── next.config.ts
-├── tsconfig.json
-└── package.json
-```
-
-## Dépendances partagées utilisées
-
-- `packages/ui` — composants UI réutilisables
-- `packages/types` — types TypeScript partagés
-- `packages/utils` — fonctions utilitaires communes
-
-## DEP concerné
-
-DEP-0134
+- Routes : `/signup`, `/login`, `/profile`, `/addresses`, `/` (boutique placeholder), `/404`.
+- Stockage local (localStorage) du profil (nom, téléphone, notes) et des adresses multiples avec choix d’adresse par défaut.
+- Validations : téléphone 10–15 chiffres, adresse complète, zone desservie (75/92/93/94) + messages d’erreur dédiés.
+- Connexion par téléphone avec redirection vers la boutique et session locale réutilisable.
+- Réinitialisation locale possible (reset session ou suppression de compte).
