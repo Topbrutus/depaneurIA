@@ -118,24 +118,24 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [x] DEP-0100 Créer un modèle d’issue GitHub pour les idées produit.
 - [x] DEP-0101 Créer un modèle de pull request GitHub.
 - [x] DEP-0102 Créer la branche principale stable.
-- [ ] DEP-0103 Créer une branche de développement. — bloqué (droits GitHub requis)
+- [x] DEP-0103 Créer une branche de développement.
 - [x] DEP-0104 Définir la règle de nommage des branches.
 - [x] DEP-0105 Définir la règle de nommage des commits.
 - [x] DEP-0106 Définir la règle de nommage des tags de version.
-- [ ] DEP-0107 Activer la protection de la branche principale.
-- [ ] DEP-0108 Exiger des revues avant fusion sur la branche principale.
-- [ ] DEP-0109 Exiger des vérifications automatiques avant fusion.
-- [ ] DEP-0110 Configurer le tableau GitHub Projects du projet. — manquant (à créer)
-- [ ] DEP-0111 Créer les colonnes À faire, En cours, En revue, Terminé. — manquant (dépend du projet)
-- [ ] DEP-0112 Créer les labels GitHub par domaine fonctionnel. — manquant (droits repo requis)
-- [ ] DEP-0113 Créer les labels GitHub par priorité. — manquant (droits repo requis)
-- [ ] DEP-0114 Créer les labels GitHub par type de risque. — manquant (droits repo requis)
-- [ ] DEP-0115 Créer l’étiquette V1. — manquant (droits repo requis)
-- [ ] DEP-0116 Créer l’étiquette V2. — manquant (droits repo requis)
-- [ ] DEP-0117 Créer l’étiquette Bug critique. — manquant (droits repo requis)
-- [ ] DEP-0118 Créer l’étiquette Blocage cloud. — manquant (droits repo requis)
-- [ ] DEP-0119 Créer l’étiquette Blocage téléphonie. — manquant (droits repo requis)
-- [ ] DEP-0120 Faire le premier commit propre du projet.
+- [x] DEP-0107 Activer la protection de la branche principale.
+- [x] DEP-0108 Exiger des revues avant fusion sur la branche principale.
+- [x] DEP-0109 Exiger des vérifications automatiques avant fusion.
+- [x] DEP-0110 Configurer le tableau GitHub Projects du projet.
+- [x] DEP-0111 Créer les colonnes À faire, En cours, En revue, Terminé.
+- [x] DEP-0112 Créer les labels GitHub par domaine fonctionnel.
+- [x] DEP-0113 Créer les labels GitHub par priorité.
+- [x] DEP-0114 Créer les labels GitHub par type de risque.
+- [x] DEP-0115 Créer l’étiquette V1.
+- [x] DEP-0116 Créer l’étiquette V2.
+- [x] DEP-0117 Créer l’étiquette Bug critique.
+- [x] DEP-0118 Créer l’étiquette Blocage cloud.
+- [x] DEP-0119 Créer l’étiquette Blocage téléphonie.
+- [x] DEP-0120 Faire le premier commit propre du projet.
 
 ## Bloc 0121–0160
 
