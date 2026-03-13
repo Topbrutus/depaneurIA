@@ -84,7 +84,8 @@ model Order {
   id          String   @id @default(cuid())
   customerId  String   @map("customer_id")
   addressId   String   @map("address_id")
-  status      String   @default("panier")
+  status      String   @default("draft")
+  statusHistory Json?   @map("status_history")
   totalAmount Float    @default(0) @map("total_amount")
   notes       String?
   createdAt   DateTime @default(now()) @map("created_at")

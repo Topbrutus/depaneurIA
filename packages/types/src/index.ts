@@ -26,4 +26,10 @@ export type {
 } from './telephony';
 
 export { ORDER_STATUSES } from './order';
-export type { OrderStatus, OrderItem, Order, CreateOrderInput } from './order';
+export type {
+  OrderStatus,
+  OrderStatusHistory,
+  OrderItem,
+  Order,
+  CreateOrderInput,
+} from './order';

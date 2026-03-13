@@ -21,10 +21,7 @@ interface ApiResponse<T> {
   data: T;
 }
 
-/**
- * Récupère les commandes prêtes pour livraison
- * (statuts: prete, acceptee, en_route)
- */
+/** Récupère les commandes prêtes pour livraison (ready_for_delivery, assigned_to_driver, out_for_delivery) */
 export async function fetchDeliveryOrders(
   status?: OrderStatus
 ): Promise<OrderWithDetails[]> {

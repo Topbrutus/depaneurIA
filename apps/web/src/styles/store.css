@@ -176,64 +176,59 @@
   letter-spacing: 0.05em;
 }
 
-.status-badge.panier {
+.status-badge.draft {
   background: #f3f4f6;
   color: #374151;
 }
 
-.status-badge.soumise {
+.status-badge.submitted {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.status-badge.confirmee {
+.status-badge.accepted {
   background: #d1fae5;
   color: #065f46;
 }
 
-.status-badge.en_preparation {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.status-badge.prete {
-  background: #d1fae5;
-  color: #047857;
-}
-
-.status-badge.acceptee {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.status-badge.en_route {
-  background: #e0e7ff;
-  color: #3730a3;
-}
-
-.status-badge.livree {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.status-badge.payee {
-  background: #d1fae5;
-  color: #047857;
-}
-
-.status-badge.annulee {
+.status-badge.rejected {
   background: #fee2e2;
   color: #991b1b;
 }
 
-.status-badge.probleme {
+.status-badge.preparing {
   background: #fef3c7;
   color: #92400e;
 }
 
-.status-badge.archivee {
-  background: #f3f4f6;
-  color: #6b7280;
+.status-badge.ready_for_delivery {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.status-badge.assigned_to_driver {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.status-badge.out_for_delivery {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.status-badge.delivered {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.delivery_failed {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.cancelled {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 /* Order actions */

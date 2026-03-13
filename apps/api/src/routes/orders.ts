@@ -3,7 +3,8 @@ import { prisma } from '../lib/prisma';
 import { mapOrder } from '../lib/mappers';
 import { requireString, requireArray, requirePositiveInt, optionalString } from '../lib/validators';
 import { NotFoundError, ValidationError } from '../lib/errors';
-import { ORDER_STATUSES } from '@depaneuria/types';
+import { applyTransition, buildInitialHistory, ensureStatus, normalizeStatusHistory } from '../lib/order-state-machine';
+import type { OrderStatus } from '@depaneuria/types';
 
 const router = Router();
 
@@ -11,14 +12,10 @@ const router = Router();
 router.get('/', async (req, res, next) => {
   try {
     const statusFilter = req.query['status'] as string | undefined;
-
-    // Valider le statut si fourni
-    if (statusFilter && !ORDER_STATUSES.includes(statusFilter as any)) {
-      throw new ValidationError(`Statut invalide: ${statusFilter}`);
-    }
+    const parsedStatus = statusFilter ? ensureStatus(statusFilter) : undefined;
 
     const orders = await prisma.order.findMany({
-      where: statusFilter ? { status: statusFilter } : undefined,
+      where: parsedStatus ? { status: parsedStatus } : undefined,
       include: {
         items: {
           include: { product: { select: { name: true } } },
@@ -103,11 +100,20 @@ router.post('/', async (req, res, next) => {
 
     totalAmount = Math.round(totalAmount * 100) / 100;
 
+    const createdAt = new Date().toISOString();
+    const baseHistory = buildInitialHistory('draft', createdAt);
+    const initialTransition = applyTransition(
+      { status: 'draft', statusHistory: baseHistory },
+      'submitted',
+      { at: createdAt }
+    );
+
     const order = await prisma.order.create({
       data: {
         customerId,
         addressId,
-        status: 'soumise',
+        status: initialTransition.nextStatus,
+        statusHistory: initialTransition.statusHistory,
         totalAmount,
         notes,
         items: {
@@ -159,12 +165,7 @@ router.get('/:id', async (req, res, next) => {
 router.patch('/:id', async (req, res, next) => {
   try {
     const orderId = req.params['id'];
-    const status = requireString(req.body.status, 'status');
-
-    // Valider que le statut est valide
-    if (!ORDER_STATUSES.includes(status as any)) {
-      throw new ValidationError(`Statut invalide: ${status}`);
-    }
+    const status = ensureStatus(requireString(req.body.status, 'status'));
 
     // Vérifier que la commande existe
     const existing = await prisma.order.findUnique({
@@ -175,10 +176,23 @@ router.patch('/:id', async (req, res, next) => {
       throw new NotFoundError('Commande');
     }
 
+    const transition = applyTransition(
+      {
+        id: existing.id,
+        status: ensureStatus(existing.status as string) as OrderStatus,
+        statusHistory: normalizeStatusHistory(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (existing as any).statusHistory
+        ),
+      },
+      status,
+      { at: new Date().toISOString(), orderId }
+    );
+
     // Mettre à jour le statut
     const updated = await prisma.order.update({
       where: { id: orderId },
-      data: { status },
+      data: { status: transition.nextStatus, statusHistory: transition.statusHistory },
       include: {
         items: {
           include: { product: { select: { name: true } } },

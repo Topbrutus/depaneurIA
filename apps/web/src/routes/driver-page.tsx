@@ -5,13 +5,13 @@ import { fetchDeliveryOrders, updateOrderStatus } from '../lib/driver-api';
 import { DeliveryQueue } from '../components/driver/delivery-queue';
 import '../styles/driver.css';
 
-type StatusFilter = 'all' | 'prete' | 'acceptee' | 'en_route';
+type StatusFilter = 'all' | 'ready_for_delivery' | 'assigned_to_driver' | 'out_for_delivery';
 
 const STATUS_FILTERS: Array<{ value: StatusFilter; label: string }> = [
   { value: 'all', label: 'Toutes' },
-  { value: 'prete', label: 'Prêtes' },
-  { value: 'acceptee', label: 'Acceptées' },
-  { value: 'en_route', label: 'En route' },
+  { value: 'ready_for_delivery', label: 'Prêtes' },
+  { value: 'assigned_to_driver', label: 'Assignées' },
+  { value: 'out_for_delivery', label: 'En route' },
 ];
 
 export function DriverPage() {
@@ -27,12 +27,12 @@ export function DriverPage() {
       let data: OrderWithDetails[];
       if (filter === 'all') {
         // Charger toutes les commandes pertinentes pour le livreur
-        const [prete, acceptee, enRoute] = await Promise.all([
-          fetchDeliveryOrders('prete'),
-          fetchDeliveryOrders('acceptee'),
-          fetchDeliveryOrders('en_route'),
+        const [ready, assigned, outForDelivery] = await Promise.all([
+          fetchDeliveryOrders('ready_for_delivery'),
+          fetchDeliveryOrders('assigned_to_driver'),
+          fetchDeliveryOrders('out_for_delivery'),
         ]);
-        data = [...prete, ...acceptee, ...enRoute].sort(
+        data = [...ready, ...assigned, ...outForDelivery].sort(
           (a, b) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Plus } from 'lucide-react';
-import type { Product, ProductVariant } from '@depaneuria/types';
+import type { Product } from '@depaneuria/types';
 import { useCartStore } from '@/lib/cart-store';
 
 interface ProductCardProps {

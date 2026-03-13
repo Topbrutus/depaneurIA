@@ -8,10 +8,10 @@ type StatusFilter = OrderStatus | 'all';
 
 const FILTER_OPTIONS: { value: StatusFilter; label: string }[] = [
   { value: 'all', label: 'Toutes' },
-  { value: 'soumise', label: 'Soumises' },
-  { value: 'confirmee', label: 'Confirmées' },
-  { value: 'en_preparation', label: 'En préparation' },
-  { value: 'prete', label: 'Prêtes' },
+  { value: 'submitted', label: 'Soumises' },
+  { value: 'accepted', label: 'Acceptées' },
+  { value: 'preparing', label: 'En préparation' },
+  { value: 'ready_for_delivery', label: 'Prêtes' },
 ];
 
 export default function StoreOpsPage() {
