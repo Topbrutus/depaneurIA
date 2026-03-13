@@ -1,0 +1,26 @@
+{
+  "name": "depaneuria",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo depaneurIA — commander simplement, livrer clairement.",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter './apps/*' dev",
+    "dev:web": "pnpm --filter @depaneuria/web dev",
+    "dev:api": "pnpm --filter @depaneuria/api dev",
+    "build": "pnpm --filter './packages/*' build && pnpm --filter './apps/*' build",
+    "test": "pnpm --filter './packages/*' test && pnpm --filter './apps/*' test",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "devDependencies": {},
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
