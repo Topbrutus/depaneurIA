@@ -6,6 +6,8 @@ import type {
   Order as PrismaOrder,
   OrderItem as PrismaOrderItem,
 } from '@prisma/client';
+import type { OrderStatusHistory } from '@depaneuria/types';
+import { ensureStatus, normalizeStatusHistory } from './order-state-machine';
 
 export function mapProduct(p: PrismaProduct) {
   return {
@@ -96,11 +98,25 @@ export function mapOrder(
     address?: { street: string; city: string; postalCode: string } | null;
   }
 ) {
+  const status = ensureStatus(o.status);
+  const statusHistory = normalizeStatusHistory(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (o as any).statusHistory as OrderStatusHistory | undefined
+  );
+  const historyWithFallback =
+    Object.keys(statusHistory).length > 0
+      ? statusHistory
+      : { [status]: o.updatedAt.toISOString() };
+  const statusChangedAt =
+    historyWithFallback[status] ?? o.updatedAt.toISOString();
+
   return {
     id: o.id,
     customerId: o.customerId,
     addressId: o.addressId,
-    status: o.status,
+    status,
+    statusHistory: historyWithFallback,
+    statusChangedAt,
     totalAmount: o.totalAmount,
     notes: o.notes,
     items: o.items.map(mapOrderItem),

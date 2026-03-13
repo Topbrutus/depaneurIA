@@ -20,17 +20,17 @@ export function OrderActions({ orderId, currentStatus, onStatusChange }: OrderAc
   };
 
   // Déterminer quelles actions sont disponibles selon le statut actuel
-  const canAccept = currentStatus === 'soumise';
-  const canReject = currentStatus === 'soumise';
-  const canPrepare = currentStatus === 'confirmee';
-  const canReady = currentStatus === 'en_preparation';
+  const canAccept = currentStatus === 'submitted';
+  const canReject = currentStatus === 'submitted';
+  const canPrepare = currentStatus === 'accepted';
+  const canReady = currentStatus === 'preparing';
 
   return (
     <div className="order-actions">
       {canAccept && (
         <button
           className="order-action-btn accept"
-          onClick={() => handleStatusChange('confirmee')}
+          onClick={() => handleStatusChange('accepted')}
           disabled={isUpdating}
         >
           Accepter
@@ -39,7 +39,7 @@ export function OrderActions({ orderId, currentStatus, onStatusChange }: OrderAc
       {canReject && (
         <button
           className="order-action-btn reject"
-          onClick={() => handleStatusChange('annulee')}
+          onClick={() => handleStatusChange('rejected')}
           disabled={isUpdating}
         >
           Refuser
@@ -48,7 +48,7 @@ export function OrderActions({ orderId, currentStatus, onStatusChange }: OrderAc
       {canPrepare && (
         <button
           className="order-action-btn prepare"
-          onClick={() => handleStatusChange('en_preparation')}
+          onClick={() => handleStatusChange('preparing')}
           disabled={isUpdating}
         >
           Passer en préparation
@@ -57,7 +57,7 @@ export function OrderActions({ orderId, currentStatus, onStatusChange }: OrderAc
       {canReady && (
         <button
           className="order-action-btn ready"
-          onClick={() => handleStatusChange('prete')}
+          onClick={() => handleStatusChange('ready_for_delivery')}
           disabled={isUpdating}
         >
           Marquer prête

@@ -24,16 +24,16 @@ export function DeliveryActions({
   };
 
   // Logique des actions disponibles selon le statut
-  // prete -> acceptee (prendre en charge)
-  // acceptee -> en_route (départ)
-  // en_route -> livree (livrée) ou probleme (échec)
+  // ready_for_delivery -> assigned_to_driver (prendre en charge)
+  // assigned_to_driver -> out_for_delivery (départ)
+  // out_for_delivery -> delivered ou delivery_failed (échec)
 
-  if (currentStatus === 'prete') {
+  if (currentStatus === 'ready_for_delivery') {
     return (
       <div className="delivery-actions">
         <button
           className="delivery-action-btn accept"
-          onClick={() => handleAction('acceptee')}
+          onClick={() => handleAction('assigned_to_driver')}
           disabled={isUpdating}
         >
           Prendre en charge
@@ -42,12 +42,12 @@ export function DeliveryActions({
     );
   }
 
-  if (currentStatus === 'acceptee') {
+  if (currentStatus === 'assigned_to_driver') {
     return (
       <div className="delivery-actions">
         <button
           className="delivery-action-btn start"
-          onClick={() => handleAction('en_route')}
+          onClick={() => handleAction('out_for_delivery')}
           disabled={isUpdating}
         >
           Démarrer la livraison
@@ -56,19 +56,19 @@ export function DeliveryActions({
     );
   }
 
-  if (currentStatus === 'en_route') {
+  if (currentStatus === 'out_for_delivery') {
     return (
       <div className="delivery-actions">
         <button
           className="delivery-action-btn delivered"
-          onClick={() => handleAction('livree')}
+          onClick={() => handleAction('delivered')}
           disabled={isUpdating}
         >
           Marquer livrée
         </button>
         <button
           className="delivery-action-btn problem"
-          onClick={() => handleAction('probleme')}
+          onClick={() => handleAction('delivery_failed')}
           disabled={isUpdating}
         >
           Signaler un problème

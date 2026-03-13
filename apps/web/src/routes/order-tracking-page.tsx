@@ -10,11 +10,17 @@ import type { OrderStatus } from '@depaneuria/types';
 
 export function OrderTrackingPage() {
   const navigate = useNavigate();
-  const [orderStatus, setOrderStatus] = useState<OrderStatus>('confirmée');
+  const [orderStatus, setOrderStatus] = useState<OrderStatus>('submitted');
 
   // Simuler la progression de la commande
   useEffect(() => {
-    const statuses: OrderStatus[] = ['confirmée', 'en_préparation', 'prête', 'en_route', 'livrée'];
+    const statuses: OrderStatus[] = [
+      'submitted',
+      'preparing',
+      'ready_for_delivery',
+      'out_for_delivery',
+      'delivered',
+    ];
     let currentIndex = 0;
 
     const interval = setInterval(() => {
@@ -29,11 +35,11 @@ export function OrderTrackingPage() {
   const createdAt = '14:32';
 
   const steps = [
-    { status: 'confirmée', label: 'En attente', color: '#f59e0b' },
-    { status: 'en_préparation', label: 'En préparation', color: '#2563eb' },
-    { status: 'prête', label: 'Prête', color: '#10b981' },
-    { status: 'en_route', label: 'En livraison', color: '#4f46e5' },
-    { status: 'livrée', label: 'Livrée', color: '#10b981' },
+    { status: 'submitted', label: 'Soumise', color: '#f59e0b' },
+    { status: 'preparing', label: 'En préparation', color: '#2563eb' },
+    { status: 'ready_for_delivery', label: 'Prête', color: '#10b981' },
+    { status: 'out_for_delivery', label: 'En livraison', color: '#4f46e5' },
+    { status: 'delivered', label: 'Livrée', color: '#10b981' },
   ];
 
   const currentStepIndex = steps.findIndex((step) => step.status === orderStatus);

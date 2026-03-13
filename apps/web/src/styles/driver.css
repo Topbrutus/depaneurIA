@@ -279,32 +279,32 @@
   text-transform: capitalize;
 }
 
-.status-badge-prete {
+.status-badge-ready_for_delivery {
   background-color: #dbeafe;
   color: #1e40af;
 }
 
-.status-badge-acceptee {
+.status-badge-assigned_to_driver {
   background-color: #fef3c7;
   color: #92400e;
 }
 
-.status-badge-en_route {
+.status-badge-out_for_delivery {
   background-color: #a7f3d0;
   color: #065f46;
 }
 
-.status-badge-livree {
+.status-badge-delivered {
   background-color: #d1fae5;
   color: #065f46;
 }
 
-.status-badge-probleme {
+.status-badge-delivery_failed {
   background-color: #fee2e2;
   color: #991b1b;
 }
 
-.status-badge-annulee {
+.status-badge-cancelled {
   background-color: #f3f4f6;
   color: #6b7280;
 }
