@@ -23,7 +23,12 @@
 - Blocs comportements UX et dispositions (`DEP-0181` à `DEP-0200`) terminés
 - Blocs système visuel de base (`DEP-0201` à `DEP-0240`) terminés
 - Blocs structure catalogue et conventions (`DEP-0241` à `DEP-0280`) terminés
-- Prochain bloc recommandé : **compléter d'abord DEP-0103, DEP-0107 à DEP-0119** (réglages GitHub manquants), puis reprendre `DEP-0281` à `DEP-0320`
+- Blocs identité client, parcours et panier (`DEP-0281` à `DEP-0360`) terminés
+- Blocs assistant texte et voix (`DEP-0361` à `DEP-0440`) terminés
+- Blocs téléphonie et rattachement API (`DEP-0441` à `DEP-0480`) terminés
+- Bloc réception dépanneur — base (`DEP-0481` à `DEP-0494`) terminé
+- Bloc réception dépanneur — actions et tableau de bord (`DEP-0495` à `DEP-0514`) terminé ✅
+- Prochain bloc recommandé : **DEP-0515 à DEP-0534** (fin réception dépanneur et interface livreur de base)
 
 ## Observation importante
 
@@ -136,14 +141,14 @@ La fondation technique (DEP-0121 à DEP-0160) est complète. Les blocs de docume
 
 ## Prochaines actions suggérées
 
-**Bloc prioritaire : compléter les réglages GitHub manquants (admin requis)**
+**Prochain bloc documentation : DEP-0515 à DEP-0534** (fin réception dépanneur + interface livreur de base)
+
+**Réglages GitHub manquants (admin requis, à compléter quand accès disponible) :**
 
 1. **DEP-0103** — Créer la branche `develop` depuis `main`
 2. **DEP-0107 à DEP-0109** — Activer la protection de `main` (PR obligatoire, revues, checks)
 3. **DEP-0110 à DEP-0111** — Créer le projet GitHub `DépannVite` avec colonnes
 4. **DEP-0112 à DEP-0119** — Créer les labels personnalisés
-
-**Ensuite : DEP-0281 à DEP-0320** (inscription, connexion et gestion client)
 
 ## Vérifications à faire dans GitHub UI (admin requis)
 
@@ -185,12 +190,11 @@ La fondation technique (DEP-0121 à DEP-0160) est complète. Les blocs de docume
 
 ## Dernière tâche terminée
 
-- DEP-0241 à DEP-0280 — structure catalogue produits et conventions : modèle catalogue de base (catégories, produits, variantes, photos, mots-clés, synonymes, disponibilité, vedettes, populaires, archivés, surcharges tenant, zones de livraison, prix internes), conventions contenu et médias (unités de vente, images principale/secondaires, ordre d'affichage, tailles/nommage/compression/recadrage images, textes courts/longs, mots-clés recherche, synonymes parlés/téléphoniques), jeu de démonstration (8 catégories, 12 produits, 15 images, synonymes, top 5 populaires), validations catalogue (catégorie valide, ≥1 image, nom ≤80 car., état disponibilité valide, procédure de chargement)
+- DEP-0495 à DEP-0514 — actions et tableau de réception dépanneur : 13 actions opérationnelles (marquer en préparation, marquer prête, assigner à un livreur, annuler, modifier avant départ, appeler le client, message automatique, signaler article manquant, proposer remplacement, marquer payé/non payé/problème livraison, rouvrir), logique de priorité (tri par statut + SLA + incidents), logique d'horodatage (12 champs timestamp par événement), journal d'activité (timeline immuable avec acteur/action/statuts avant-après), tableau de bord réception (bandeau KPI, filtres, onglets, split view), vue détaillée commande (chrono, contact, livraison, articles, paiement, journal), boutons acceptation et refus (UI + accessibilité clavier)
 
 ## En cours
 
-- Synchronisation de l'état réel du dépôt (cette PR)
-- Prochaine étape : compléter DEP-0103, DEP-0107 à DEP-0119 (réglages GitHub), puis DEP-0281 à DEP-0320
+- Prochaine étape : **DEP-0515 à DEP-0534** (fin réception dépanneur et interface livreur de base)
 
 ## Bloqueurs
 
