@@ -14,75 +14,113 @@
 - Labels personnalisés créés : DEP-0112 à DEP-0119 (domaines, priorités, risques, V1/V2, blocages)
 - Premier commit de base enregistré
 
-## Ossature technique en place
+## Bloc actif recommandé
 
-L'ossature technique du monorepo est complète. Fichiers racine vérifiés :
+- Blocs GitHub de fondation (`DEP-0084` à `DEP-0120`) terminés
+- Blocs fondation technique (`DEP-0121` à `DEP-0160`) terminés
+- Prochain bloc recommandé : `DEP-0161` à `DEP-0200` (définition des interfaces et parcours utilisateur)
 
-| Fichier / Dossier            | Rôle                                            |
-|------------------------------|------------------------------------------------|
-| `package.json`               | Monorepo pnpm, scripts dev/build/test/lint/format/typecheck, Node ≥20, pnpm ≥9 |
-| `pnpm-workspace.yaml`        | Définition des workspaces (`apps/*`, `packages/*`) |
-| `tsconfig.json`              | Configuration TypeScript stricte (ES2022, bundler, React JSX) |
-| `.eslintrc.json`             | ESLint + TypeScript + React + Prettier + import order |
-| `.eslintignore`              | Exclusions lint                                  |
-| `.prettierrc`                | Prettier (single quotes, semi, 100 cols, LF)    |
-| `.prettierignore`            | Exclusions formatage                             |
-| `.env.example`               | Template des variables d'environnement           |
-| `.gitignore`                 | Exclusions Git standard                          |
-| `scripts/dev.sh`             | Script shell pour lancer tout le projet en local |
-| `apps/web/README.md`         | Structure prévue du front-end (Next.js/React)    |
-| `apps/api/README.md`         | Structure prévue de l'API (Node.js/Express)      |
-| `packages/types/README.md`   | Types TypeScript partagés                        |
-| `packages/ui/README.md`      | Composants React partagés                        |
-| `packages/utils/README.md`   | Utilitaires partagés                             |
+## Observation importante
 
-Décisions documentées dans `docs/decisions/` :
-- `DEP-0121-DEP-0127.md` — choix stack (TS, React, Node, monorepo, pnpm, Node 20, TS 5.3)
-- `DEP-0136-env-vars-strategy.md` — stratégie variables d'environnement
-- `DEP-0137-secrets-strategy.md` — stratégie des secrets
-- `DEP-0138-env-local.md` — stratégie .env locaux
-- `DEP-0139-env-cloud.md` — stratégie .env cloud
-- `DEP-0140-scripts-strategy.md` — stratégie scripts pnpm
+Le bloc 0001 (DEP-0001 à DEP-0010) reste complet. Le bloc GitHub de fondation (DEP-0084 à DEP-0120) est maintenant achevé : README, LICENSE, .gitignore, dossiers structurants, CONTRIBUTING, CODEOWNERS, modèles d'issues/PR, branche `develop`, protection `main`, projet `DépannVite` (Board) et labels personnalisés sont en place. Les règles de nommage des branches, commits et tags de version sont documentées dans CONTRIBUTING.md.
 
 ## État Réel Vérifié (2026-03-13)
 
 **Terminé concrètement :**
 - DEP-0001 à DEP-0010 — vision et cadrage initial
 - DEP-0084 à DEP-0120 — fondation GitHub complète
-- DEP-0121 à DEP-0141 — décisions techniques, configurations qualité, structure monorepo, stratégie env/scripts
+- DEP-0121 à DEP-0127 — décisions techniques stack documentées (TypeScript, React, Node.js, monorepo pnpm)
+- DEP-0128 à DEP-0133 — outils qualité configurés (Prettier, ESLint, TypeScript strict)
+- DEP-0134 à DEP-0135 — structure monorepo définie (`apps/`, `packages/` avec workspaces)
+- DEP-0136 à DEP-0140 — stratégies env et scripts documentées et implémentées
+- DEP-0141 à DEP-0160 — scripts npm/pnpm créés, règles de nommage établies, ossature locale stabilisée
 
-**Preuves par fichier :**
-- DEP-0121–0127 → `docs/decisions/DEP-0121-DEP-0127.md`
-- DEP-0128 → `.prettierrc`, `.prettierignore`
-- DEP-0129 → `.eslintrc.json`, `.eslintignore`
-- DEP-0130 → `tsconfig.json` (strict mode complet), `.eslintrc.json` (règles qualité)
-- DEP-0131 → `tsconfig.json`
-- DEP-0132 → `.prettierrc`
-- DEP-0133 → `.eslintrc.json`
-- DEP-0134 → `apps/web/README.md`, `apps/api/README.md`
-- DEP-0135 → `packages/types/README.md`, `packages/ui/README.md`, `packages/utils/README.md`
-- DEP-0136 → `docs/decisions/DEP-0136-env-vars-strategy.md`, `.env.example`
-- DEP-0137 → `docs/decisions/DEP-0137-secrets-strategy.md`
-- DEP-0138 → `docs/decisions/DEP-0138-env-local.md`
-- DEP-0139 → `docs/decisions/DEP-0139-env-cloud.md`
-- DEP-0140 → `docs/decisions/DEP-0140-scripts-strategy.md`, `package.json` (scripts)
-- DEP-0141 → `scripts/dev.sh`, `package.json` (`pnpm dev`)
+**Fichiers de configuration créés :**
+- `tsconfig.json` — configuration TypeScript 5.3+ strict
+- `.eslintrc.json` — configuration ESLint avec règles React et TypeScript
+- `.prettierrc` — configuration Prettier pour formatage uniforme
+- `package.json` — monorepo avec workspaces pnpm et scripts dev/build/test/lint/format
+- `.env.example` — modèle de variables d'environnement
+- Docs decisions : DEP-0121-0127, DEP-0136-0140
+
+**Non commencé :**
+- DEP-0161 à DEP-0200 — définition des parcours utilisateur et interfaces
+
+## Manques publics actuels
+
+Aucun manque identifié dans les blocs DEP-0084 à DEP-0160. La fondation technique est complète.
+
+## Prochaines actions suggérées
+
+**Bloc prioritaire : DEP-0161 à DEP-0200**
+
+1. **DEP-0161 à DEP-0170** — Définir les parcours utilisateur :
+   - Écrire la carte complète du site côté client
+   - Écrire la carte complète du site côté dépanneur
+   - Écrire la carte complète du site côté livreur
+   - Définir les pages principales (accueil, boutique, mode assisté, connexion, profil)
+
+2. **DEP-0171 à DEP-0180** — Définir les pages secondaires :
+   - Pages d'adresses client, historique commandes, suivi de commande
+   - Pages de contact, conditions d'utilisation, confidentialité
+   - Pages d'aide vocale et d'accessibilité
+
+3. **DEP-0181 à DEP-0200** — Définir les comportements UX :
+   - Dispositions desktop et mobile (3 sections vs empilée)
+   - Comportements du panier, du chat assistant, des suggestions
+   - Comportements de l'assistant selon différents contextes utilisateur
+
+## Vérifications à faire dans GitHub UI (admin requis)
+
+- DEP-0107 — Règle de protection `main` active avec interdiction de suppression
+- DEP-0108 — Au moins 1 revue obligatoire avant fusion sur `main`
+- DEP-0109 — Status checks requis et branche à jour avant fusion
+
+## Consignes GitHub UI
+
+### DEP-0107 — Protection de la branche principale
+- Aller dans `Settings > Branches > Branch protection rules`
+- Cliquer sur `Add rule`
+- Dans `Branch name pattern` : saisir `main`
+- Cocher `Restrict deletions`
+- Cocher `Require a pull request before merging`
+- Enregistrer (`Create`)
+
+### DEP-0108 — Revues obligatoires
+- Dans la même règle de protection de `main`
+- Cocher `Require a pull request before merging`
+- Sous cette option, cocher `Require approvals`
+- Définir le nombre minimal de revues à `1`
+- (Optionnel) Cocher `Dismiss stale pull request approvals when new commits are pushed`
+- Enregistrer
+
+### DEP-0109 — Checks obligatoires
+- Dans la même règle de protection de `main`
+- Cocher `Require status checks to pass before merging`
+- Cocher `Require branches to be up to date before merging`
+- Ajouter les checks existants s'il y en a (aucun workflow CI n'est encore créé à ce stade)
+- Enregistrer
+
+### DEP-0110 — GitHub Projects
+- Aller dans l'onglet `Projects` du dépôt
+- Cliquer sur `Link a project` ou `New project`
+- Choisir le template `Board` (tableau Kanban)
+- Nommer le projet `DépannVite`
+- Créer les colonnes : `À faire`, `En cours`, `En revue`, `Terminé`, `Bloqué`
 
 ## Dernière tâche terminée
 
-- DEP-0121 à DEP-0160 — ossature technique complète (stack, configs, monorepo, env, scripts, conventions de nommage, vérification locale, stabilisation)
+- DEP-0121 à DEP-0160 — fondation technique complète (stack TypeScript/React/Node.js, configs qualité, monorepo pnpm, scripts dev/build/test, stratégies env/secrets, règles de nommage, ossature locale stabilisée)
 
 ## En cours
 
 - Aucune tâche actuellement en cours
+- Prochaine étape : DEP-0161 à DEP-0200 (définition des parcours utilisateur et interfaces)
 
 ## Bloqueurs
 
 - Aucun bloqueur technique identifié
-
-## Prochain bloc recommandé
-
-- **DEP-0161 à DEP-0170** (BLOCK-017)
+- Les blocs DEP-0161+ peuvent être réalisés en se concentrant sur la documentation des interfaces et parcours utilisateur
 
 ## Convention d'ID
 

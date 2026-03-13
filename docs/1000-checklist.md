@@ -140,7 +140,7 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 ## Bloc 0121–0160
 
 - [x] DEP-0121 Choisir officiellement TypeScript comme langage principal du projet.
-- [x] DEP-0122 Choisir officiellement React pour l’interface web.
+- [x] DEP-0122 Choisir officiellement React pour l'interface web.
 - [x] DEP-0123 Choisir officiellement Node.js pour le backend.
 - [x] DEP-0124 Choisir officiellement un monorepo pour tout garder ensemble.
 - [x] DEP-0125 Choisir officiellement un gestionnaire de paquets unique.
@@ -154,14 +154,14 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [x] DEP-0133 Créer la configuration de lint du code.
 - [x] DEP-0134 Définir la structure des applications du monorepo.
 - [x] DEP-0135 Définir la structure des bibliothèques partagées du monorepo.
-- [x] DEP-0136 Définir la stratégie de variables d’environnement.
+- [x] DEP-0136 Définir la stratégie de variables d'environnement.
 - [x] DEP-0137 Définir la stratégie des secrets.
 - [x] DEP-0138 Définir la stratégie de fichiers .env locaux.
 - [x] DEP-0139 Définir la stratégie de fichiers .env cloud.
 - [x] DEP-0140 Définir la stratégie de scripts npm ou pnpm.
 - [x] DEP-0141 Créer un script pour lancer tout le projet en local.
 - [x] DEP-0142 Créer un script pour lancer seulement le front.
-- [x] DEP-0143 Créer un script pour lancer seulement l’API.
+- [x] DEP-0143 Créer un script pour lancer seulement l'API.
 - [x] DEP-0144 Créer un script pour exécuter les tests.
 - [x] DEP-0145 Créer un script pour le lint.
 - [x] DEP-0146 Créer un script pour le formatage.
@@ -177,8 +177,8 @@ Version convertie depuis le fichier source fourni par l’utilisateur.
 - [x] DEP-0156 Définir les règles de nommage des tenants clients.
 - [x] DEP-0157 Définir les règles de nommage des langues.
 - [x] DEP-0158 Définir les règles de nommage des médias produits.
-- [x] DEP-0159 Vérifier que l’environnement local peut cloner et exécuter le dépôt.
-- [x] DEP-0160 Faire un commit de stabilisation de l’ossature locale.
+- [x] DEP-0159 Vérifier que l'environnement local peut cloner et exécuter le dépôt.
+- [x] DEP-0160 Faire un commit de stabilisation de l'ossature locale.
 
 ## Bloc 0161–0200
 
