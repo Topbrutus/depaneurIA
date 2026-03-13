@@ -226,7 +226,7 @@ La fondation technique (DEP-0121 à DEP-0160) est complète. Les blocs de docume
 
 - Prochaine étape : **DEP-0761 à DEP-0800** (bloc suivant après multi-tenant V1)
 
-## Multi-tenant V1 — DEP-0681 à DEP-0760
+## Multi-tenant V1 — DEP-0641 à DEP-0680
 
 Ajouté dans cette PR :
 - `packages/types/src/tenant.ts` — type `Tenant` et constante `DEFAULT_TENANT_ID`

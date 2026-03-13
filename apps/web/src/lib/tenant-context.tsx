@@ -27,7 +27,7 @@ export function TenantProvider({ children }: { children: ReactNode }) {
     fetchTenants()
       .then((data) => {
         setTenants(data);
-        if (data.length > 0 && !data.find((t) => t.id === currentTenantId)) {
+        if (data.length > 0 && !data.find((t) => t.id === DEFAULT_TENANT_ID)) {
           setCurrentTenantId(data[0].id);
         }
       })

@@ -2,8 +2,7 @@ import { Router } from 'express';
 import { prisma } from '../lib/prisma';
 import { listTenants } from '../lib/tenant-store';
 import { resolveTenant, tenantId } from '../lib/tenant-context';
-import { mapTenant } from '../lib/tenant-mappers';
-import { mapCategoryWithProducts, mapProduct, mapOrder } from '../lib/mappers';
+import { mapCategoryWithProducts, mapOrder } from '../lib/mappers';
 import { requireString, requireArray, requirePositiveInt, optionalString } from '../lib/validators';
 import { NotFoundError, ValidationError } from '../lib/errors';
 import {
@@ -29,7 +28,7 @@ const router = Router();
 router.get('/', (_req, res) => {
   res.json({
     success: true,
-    data: listTenants().map(mapTenant),
+    data: listTenants(),
   });
 });
 
