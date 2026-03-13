@@ -359,3 +359,30 @@ sans une décision explicite documentée.
 | La validation inscription/retour est documentée   | ✅ Fait |
 | Les données minimales pour livrer sont confirmées | ✅ Fait |
 | Le périmètre gelé est explicitement listé         | ✅ Fait |
+
+---
+
+## Résumé du bloc DEP-0311 à DEP-0320
+
+Ce document a défini 10 décisions couvrant les erreurs de validation, la persistance des données et le gel du parcours client :
+
+1. **DEP-0311** : Message d'erreur pour téléphone invalide (`ERR_PHONE_INVALID`).
+2. **DEP-0312** : Message d'erreur pour zone non desservie (`ERR_ZONE_NOT_SERVED`).
+3. **DEP-0313** : Message d'erreur pour compte incomplet (`ERR_ACCOUNT_INCOMPLETE`).
+4. **DEP-0314** : Logique de sauvegarde du panier lié au compte (fusion local/serveur, expiration 30 jours).
+5. **DEP-0315** : Logique de sauvegarde des préférences de recherche (écrasement par le serveur à la connexion).
+6. **DEP-0316** : Logique de sauvegarde de la dernière commande (résumé rapide, bouton « Recommander »).
+7. **DEP-0317** : Logique de sauvegarde des produits favoris (réservée, non active en V1).
+8. **DEP-0318** : Validation que le client peut s'inscrire et revenir sans friction (scénario bout en bout).
+9. **DEP-0319** : Validation que les données minimales du client sont suffisantes pour livrer (nom, téléphone, adresse).
+10. **DEP-0320** : Gel du parcours client de base (DEP-0281 à DEP-0320, aucune modification sans nouveau DEP).
+
+---
+
+## Validation finale
+
+Ce document définit l'ensemble des décisions concernant les erreurs de validation, la persistance des données client et le gel du parcours de base (DEP-0311 à DEP-0320).
+
+Toutes les spécifications sont documentées de manière complète, cohérente et prête à être implémentée.
+
+**Statut** : ✅ Documentation terminée.
