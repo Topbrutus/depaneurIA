@@ -27,6 +27,7 @@ Le bloc 0001 (DEP-0001 à DEP-0010) reste complet. Le bloc GitHub de fondation (
 ## État Réel Vérifié (2026-03-13)
 
 **Terminé concrètement :**
+- DEP-0001 à DEP-0010 — vision et cadrage initial
 - DEP-0084 à DEP-0120 — fondation GitHub complète
 - DEP-0121 à DEP-0127 — décisions techniques stack documentées (TypeScript, React, Node.js, monorepo pnpm)
 - DEP-0128 à DEP-0133 — outils qualité configurés (Prettier, ESLint, TypeScript strict)
