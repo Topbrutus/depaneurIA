@@ -19,7 +19,9 @@ import AdminCatalogPage from './routes/admin-catalog-page'
 import { clearCustomer, endSession, loadCustomer, loadSession, saveCustomer, startSession } from './lib/customer-storage'
 import { normalizePhone } from './lib/validation'
 import { TenantProvider } from './lib/tenant-context'
+import { I18nProvider } from './lib/i18n-context'
 import { ProtectedRoute } from './components/common/protected-route'
+import { LanguageSwitcher } from './components/common/language-switcher'
 
 const Navigation = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
   const { pathname } = useLocation()
@@ -59,6 +61,7 @@ const Navigation = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
           Connecté
         </span>
       )}
+      <LanguageSwitcher />
     </nav>
   )
 }
@@ -176,18 +179,19 @@ const AppShell = () => {
 
   return (
     <BrowserRouter>
-      <TenantProvider>
-      <div className="app-shell">
-        <header className="topbar">
-          <div className="brand">
-            <span className="dot" aria-hidden />
-            <span className="logo">depaneurIA — client</span>
-          </div>
-          <Navigation isLoggedIn={Boolean(session?.loggedIn)} />
-        </header>
+      <I18nProvider>
+        <TenantProvider>
+          <div className="app-shell">
+            <header className="topbar">
+              <div className="brand">
+                <span className="dot" aria-hidden />
+                <span className="logo">depaneurIA — client</span>
+              </div>
+              <Navigation isLoggedIn={Boolean(session?.loggedIn)} />
+            </header>
 
-        <main>
-          <Routes>
+            <main>
+              <Routes>
             <Route path="/" element={<ShopPage />} />
             <Route path="/panier" element={<CartPage />} />
             <Route path="/commande/succes" element={<OrderSuccessPage />} />
@@ -268,9 +272,10 @@ const AppShell = () => {
             <Route path="/404" element={<NotFoundPage />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
-        </main>
-      </div>
-      </TenantProvider>
+            </main>
+          </div>
+        </TenantProvider>
+      </I18nProvider>
     </BrowserRouter>
   )
 }

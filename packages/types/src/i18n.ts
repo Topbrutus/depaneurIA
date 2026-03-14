@@ -1,0 +1,207 @@
+export type Locale = 'fr' | 'en'
+
+export const DEFAULT_LOCALE: Locale = 'fr'
+
+export const SUPPORTED_LOCALES: readonly Locale[] = ['fr', 'en'] as const
+
+export interface Translations {
+  common: {
+    shop: string
+    signup: string
+    login: string
+    profile: string
+    addresses: string
+    cart: string
+    admin: string
+    storeOps: string
+    driver: string
+    connected: string
+    logout: string
+    save: string
+    cancel: string
+    delete: string
+    edit: string
+    add: string
+    back: string
+    next: string
+    search: string
+    filter: string
+    reset: string
+    loading: string
+    error: string
+    success: string
+    warning: string
+    confirm: string
+    yes: string
+    no: string
+  }
+  auth: {
+    signupTitle: string
+    signupDescription: string
+    loginTitle: string
+    loginDescription: string
+    name: string
+    namePlaceholder: string
+    phone: string
+    phonePlaceholder: string
+    deliveryNotes: string
+    deliveryNotesPlaceholder: string
+    signupButton: string
+    loginButton: string
+    logoutButton: string
+    accountIncomplete: string
+    invalidPhone: string
+    accountNotFound: string
+    alreadyLoggedIn: string
+  }
+  profile: {
+    title: string
+    yourProfile: string
+    updateProfile: string
+    deleteAccount: string
+    confirmDelete: string
+    accountDeleted: string
+    notLoggedIn: string
+    loginFirst: string
+  }
+  addresses: {
+    title: string
+    addAddress: string
+    editAddress: string
+    deleteAddress: string
+    setDefault: string
+    defaultAddress: string
+    label: string
+    labelPlaceholder: string
+    line1: string
+    line1Placeholder: string
+    line2: string
+    line2Placeholder: string
+    postalCode: string
+    postalCodePlaceholder: string
+    city: string
+    cityPlaceholder: string
+    deliveryNotes: string
+    deliveryNotesPlaceholder: string
+    addressIncomplete: string
+    zoneNotServed: string
+    noAddresses: string
+    addFirstAddress: string
+  }
+  shop: {
+    title: string
+    searchPlaceholder: string
+    allCategories: string
+    noProducts: string
+    addToCart: string
+    outOfStock: string
+    onOrder: string
+    popular: string
+    lastOrder: string
+    topProducts: string
+    reorderLast: string
+  }
+  cart: {
+    title: string
+    yourCart: string
+    emptyCart: string
+    continueShopping: string
+    total: string
+    checkout: string
+    removeItem: string
+    quantity: string
+    selectAddress: string
+    selectPaymentMethod: string
+    paymentCash: string
+    paymentCard: string
+    orderPlaced: string
+    orderFailed: string
+  }
+  order: {
+    success: string
+    successMessage: string
+    failure: string
+    failureMessage: string
+    tracking: string
+    trackingTitle: string
+    orderNumber: string
+    status: string
+    statusDraft: string
+    statusSubmitted: string
+    statusAccepted: string
+    statusRejected: string
+    statusPreparing: string
+    statusReady: string
+    statusAssigned: string
+    statusOutForDelivery: string
+    statusDelivered: string
+    statusFailed: string
+    statusCancelled: string
+    viewOrder: string
+    backToShop: string
+  }
+  assistant: {
+    title: string
+    placeholder: string
+    listening: string
+    processing: string
+    voiceNotSupported: string
+    microphoneError: string
+    startVoice: string
+    stopVoice: string
+    send: string
+    clear: string
+  }
+  store: {
+    title: string
+    orders: string
+    allOrders: string
+    newOrders: string
+    preparing: string
+    ready: string
+    accept: string
+    reject: string
+    markPreparing: string
+    markReady: string
+    assignDriver: string
+    callCustomer: string
+    noOrders: string
+    filterByTenant: string
+  }
+  driver: {
+    title: string
+    deliveries: string
+    available: string
+    assigned: string
+    inProgress: string
+    accept: string
+    startDelivery: string
+    completeDelivery: string
+    reportFailure: string
+    noDeliveries: string
+    filterByTenant: string
+  }
+  admin: {
+    catalogTitle: string
+    products: string
+    categories: string
+    addProduct: string
+    editProduct: string
+    deleteProduct: string
+    productName: string
+    productDescription: string
+    price: string
+    stock: string
+    minStock: string
+    category: string
+    availability: string
+    availableInStock: string
+    availableOutOfStock: string
+    availableOnOrder: string
+    markPopular: string
+    activate: string
+    deactivate: string
+    noProducts: string
+    selectTenant: string
+  }
+}

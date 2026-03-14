@@ -62,3 +62,6 @@ export type {
   SessionResponse,
   LogoutResponse,
 } from './auth';
+
+export { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './i18n';
+export type { Locale, Translations } from './i18n';
