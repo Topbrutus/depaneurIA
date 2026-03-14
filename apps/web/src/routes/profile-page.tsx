@@ -4,6 +4,7 @@ import type { CustomerData, CustomerSession } from '@depaneuria/types'
 import { CustomerForm, type CustomerFormValues } from '../components/customer/customer-form'
 import { startSession } from '../lib/customer-storage'
 import { normalizePhone, validateProfile, type ProfileValidationErrors } from '../lib/validation'
+import { useI18n } from '../lib/i18n-context'
 
 type ProfilePageProps = {
   customer: CustomerData | null
@@ -15,6 +16,7 @@ type ProfilePageProps = {
 
 const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onLogout }: ProfilePageProps) => {
   const navigate = useNavigate()
+  const { translations: t } = useI18n()
   const [errors, setErrors] = useState<ProfileValidationErrors>({})
   const [info, setInfo] = useState<string>('')
 
@@ -22,10 +24,10 @@ const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onL
     return (
       <div className="page">
         <div className="card">
-          <h2>Aucun profil trouvé</h2>
-          <p className="muted">Créez un profil avant de modifier vos informations.</p>
+          <h2>{t.profile.noProfile}</h2>
+          <p className="muted">{t.profile.createProfileFirst}</p>
           <Link className="btn btn-primary" to="/signup">
-            Créer mon profil
+            {t.profile.createProfile}
           </Link>
         </div>
       </div>
@@ -55,7 +57,7 @@ const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onL
     if (session?.loggedIn) {
       onSessionChange(startSession(updated.profile.phone))
     }
-    setInfo('Profil mis à jour.')
+    setInfo(t.profile.profileUpdated)
   }
 
   const handleDeleteAccount = () => {
@@ -69,9 +71,9 @@ const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onL
     <div className="page">
       <div className="page-header">
         <div>
-          <p className="eyebrow">Profil</p>
-          <h1>Vos informations client</h1>
-          <p className="muted">Mettez à jour votre nom, téléphone et notes de livraison. Les changements restent en local.</p>
+          <p className="eyebrow">{t.profile.title}</p>
+          <h1>{t.profile.yourInfo}</h1>
+          <p className="muted">{t.profile.profileDescription}</p>
         </div>
       </div>
 
@@ -82,7 +84,7 @@ const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onL
             phone: customer.profile.phone,
             deliveryNotes: customer.profile.deliveryNotes ?? '',
           }}
-          submitLabel="Mettre à jour"
+          submitLabel={t.profile.updateButton}
           onSubmit={handleSubmit}
           errors={errors}
         />
@@ -91,11 +93,11 @@ const ProfilePage = ({ customer, session, onCustomerChange, onSessionChange, onL
 
         <div className="card danger-card">
           <div>
-            <h3>Supprimer le compte</h3>
-            <p className="muted">Réinitialise le profil, les adresses et la session locales.</p>
+            <h3>{t.profile.deleteAccountTitle}</h3>
+            <p className="muted">{t.profile.deleteAccountDescription}</p>
           </div>
           <button className="btn btn-danger" type="button" onClick={handleDeleteAccount}>
-            Supprimer et repartir de zéro
+            {t.profile.deleteAndReset}
           </button>
         </div>
       </div>

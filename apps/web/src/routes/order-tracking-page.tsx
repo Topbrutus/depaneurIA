@@ -7,9 +7,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Package, Truck, CheckCircle } from 'lucide-react';
 import type { OrderStatus } from '@depaneuria/types';
+import { useI18n } from '../lib/i18n-context';
 
 export function OrderTrackingPage() {
   const navigate = useNavigate();
+  const { translations: t } = useI18n();
   const [orderStatus, setOrderStatus] = useState<OrderStatus>('submitted');
 
   // Simuler la progression de la commande
@@ -35,11 +37,11 @@ export function OrderTrackingPage() {
   const createdAt = '14:32';
 
   const steps = [
-    { status: 'submitted', label: 'Soumise', color: '#f59e0b' },
-    { status: 'preparing', label: 'En préparation', color: '#2563eb' },
-    { status: 'ready_for_delivery', label: 'Prête', color: '#10b981' },
-    { status: 'out_for_delivery', label: 'En livraison', color: '#4f46e5' },
-    { status: 'delivered', label: 'Livrée', color: '#10b981' },
+    { status: 'submitted', label: t.order.statusSubmitted, color: '#f59e0b' },
+    { status: 'preparing', label: t.order.statusPreparing, color: '#2563eb' },
+    { status: 'ready_for_delivery', label: t.order.statusReady, color: '#10b981' },
+    { status: 'out_for_delivery', label: t.order.statusOutForDelivery, color: '#4f46e5' },
+    { status: 'delivered', label: t.order.statusDelivered, color: '#10b981' },
   ];
 
   const currentStepIndex = steps.findIndex((step) => step.status === orderStatus);
@@ -68,12 +70,12 @@ export function OrderTrackingPage() {
           }}
         >
           <ArrowLeft size={20} />
-          Retour à la boutique
+          {t.order.backToShop}
         </button>
 
         <div style={{ backgroundColor: 'white', padding: '32px', borderRadius: '8px' }}>
           <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>
-            Suivi de commande
+            {t.order.trackingPage}
           </h1>
 
           <div
@@ -84,7 +86,7 @@ export function OrderTrackingPage() {
               fontFamily: 'monospace',
             }}
           >
-            {orderNumber} • Créée à {createdAt}
+            {orderNumber} • {t.order.createdAt} {createdAt}
           </div>
 
           {/* Barre de progression */}
@@ -165,7 +167,7 @@ export function OrderTrackingPage() {
           {/* Détails de la commande */}
           <div style={{ marginTop: '32px' }}>
             <h3 style={{ fontSize: '18px', fontWeight: '600', marginBottom: '16px' }}>
-              Produits commandés
+              {t.order.productsOrdered}
             </h3>
 
             <div style={{ fontSize: '14px', color: '#6b7280' }}>
@@ -189,7 +191,7 @@ export function OrderTrackingPage() {
               width: '100%',
             }}
           >
-            Retour à la boutique
+            {t.order.backToShop}
           </button>
         </div>
       </div>
