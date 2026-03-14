@@ -53,6 +53,15 @@ export interface Translations {
     invalidPhone: string
     accountNotFound: string
     alreadyLoggedIn: string
+    loginSubtitle: string
+    loginDescription2: string
+    loginSuccess: string
+    loginError: string
+    invalidPhoneFormat: string
+    resetSession: string
+    sessionReset: string
+    or: string
+    createAccount: string
   }
   profile: {
     title: string
@@ -63,6 +72,16 @@ export interface Translations {
     accountDeleted: string
     notLoggedIn: string
     loginFirst: string
+    noProfile: string
+    createProfileFirst: string
+    createProfile: string
+    yourInfo: string
+    profileDescription: string
+    updateButton: string
+    profileUpdated: string
+    deleteAccountTitle: string
+    deleteAccountDescription: string
+    deleteAndReset: string
   }
   addresses: {
     title: string
@@ -87,6 +106,27 @@ export interface Translations {
     zoneNotServed: string
     noAddresses: string
     addFirstAddress: string
+    noAddress: string
+    createProfileFirst: string
+    createProfile: string
+    manageAddresses: string
+    addressesDescription: string
+    addNewAddress: string
+    editExisting: string
+    cancelEdit: string
+    update: string
+    add: string
+    myAddresses: string
+    noAddressYet: string
+    notes: string
+    modify: string
+    setAsDefault: string
+    remove: string
+    default: string
+    addressAdded: string
+    addressUpdated: string
+    addressDeleted: string
+    defaultUpdated: string
   }
   shop: {
     title: string
@@ -100,6 +140,11 @@ export interface Translations {
     lastOrder: string
     topProducts: string
     reorderLast: string
+    categories: string
+    all: string
+    searchProduct: string
+    inStockOnly: string
+    popularItems: string
   }
   cart: {
     title: string
@@ -116,6 +161,11 @@ export interface Translations {
     paymentCard: string
     orderPlaced: string
     orderFailed: string
+    emptyCartTitle: string
+    emptyCartMessage: string
+    backToShop: string
+    backToCart: string
+    confirmAndSend: string
   }
   order: {
     success: string
@@ -139,6 +189,20 @@ export interface Translations {
     statusCancelled: string
     viewOrder: string
     backToShop: string
+    orderSent: string
+    orderSentMessage: string
+    orderNumberLabel: string
+    shopkeeperMessage: string
+    viewTracking: string
+    failureTitle: string
+    failureMessageDetails: string
+    errorCode: string
+    errorDetails: string
+    retry: string
+    cancel: string
+    trackingPage: string
+    createdAt: string
+    productsOrdered: string
   }
   assistant: {
     title: string

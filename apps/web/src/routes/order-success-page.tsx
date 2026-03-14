@@ -6,10 +6,12 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { CheckCircle, Eye, ShoppingBag } from 'lucide-react';
+import { useI18n } from '../lib/i18n-context';
 
 export function OrderSuccessPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { translations: t } = useI18n();
   const orderNumber = location.state?.orderNumber || 'CMD-2026-0001';
 
   useEffect(() => {
@@ -50,11 +52,11 @@ export function OrderSuccessPage() {
             color: '#111827',
           }}
         >
-          Commande envoyée
+          {t.order.orderSent}
         </h1>
 
         <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '32px' }}>
-          Ta commande a bien été envoyée au dépanneur.
+          {t.order.orderSentMessage}
         </p>
 
         <div
@@ -66,7 +68,7 @@ export function OrderSuccessPage() {
           }}
         >
           <div style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>
-            Numéro de commande
+            {t.order.orderNumberLabel}
           </div>
           <div
             style={{
@@ -89,7 +91,7 @@ export function OrderSuccessPage() {
           }}
         >
           <div style={{ fontSize: '14px', color: '#92400e' }}>
-            Le dépanneur prendra ta commande en charge dans les prochaines minutes.
+            {t.order.shopkeeperMessage}
           </div>
         </div>
 
@@ -111,7 +113,7 @@ export function OrderSuccessPage() {
             }}
           >
             <Eye size={20} />
-            Voir le suivi
+            {t.order.viewTracking}
           </button>
 
           <button
@@ -131,7 +133,7 @@ export function OrderSuccessPage() {
             }}
           >
             <ShoppingBag size={20} />
-            Retour à la boutique
+            {t.order.backToShop}
           </button>
         </div>
       </div>

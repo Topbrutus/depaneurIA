@@ -8,9 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Send } from 'lucide-react';
 import { useCartStore } from '@/lib/cart-store';
 import { OrderSummary } from '@/components/shop/order-summary';
+import { useI18n } from '../lib/i18n-context';
 
 export function CartPage() {
   const navigate = useNavigate();
+  const { translations: t } = useI18n();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
 
@@ -57,7 +59,7 @@ export function CartPage() {
             }}
           >
             <ArrowLeft size={20} />
-            Retour à la boutique
+            {t.cart.backToShop}
           </button>
 
           <div
@@ -69,10 +71,10 @@ export function CartPage() {
             }}
           >
             <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>
-              Ton panier est vide
+              {t.cart.emptyCartTitle}
             </h1>
             <p style={{ color: '#6b7280', marginBottom: '24px' }}>
-              Ajoute des produits pour continuer.
+              {t.cart.emptyCartMessage}
             </p>
             <button
               onClick={() => navigate('/')}
@@ -86,7 +88,7 @@ export function CartPage() {
                 cursor: 'pointer',
               }}
             >
-              Retour à la boutique
+              {t.cart.backToShop}
             </button>
           </div>
         </div>
@@ -112,7 +114,7 @@ export function CartPage() {
           }}
         >
           <ArrowLeft size={20} />
-          Retour à la boutique
+          {t.cart.backToShop}
         </button>
 
         <OrderSummary
@@ -141,7 +143,7 @@ export function CartPage() {
               cursor: 'pointer',
             }}
           >
-            Retour au panier
+            {t.cart.backToCart}
           </button>
 
           <button
@@ -161,7 +163,7 @@ export function CartPage() {
               gap: '8px',
             }}
           >
-            Confirmer et envoyer la commande
+            {t.cart.confirmAndSend}
             <Send size={20} />
           </button>
         </div>
