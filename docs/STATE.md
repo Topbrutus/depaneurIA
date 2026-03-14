@@ -224,6 +224,7 @@ La fondation technique (DEP-0121 à DEP-0160) est complète. Les blocs de docume
 - DEP-0495 à DEP-0514 — actions et tableau de réception dépanneur : 13 actions opérationnelles (marquer en préparation, marquer prête, assigner à un livreur, annuler, modifier avant départ, appeler le client, message automatique, signaler article manquant, proposer remplacement, marquer payé/non payé/problème livraison, rouvrir), logique de priorité (tri par statut + SLA + incidents), logique d'horodatage (12 champs timestamp par événement), journal d'activité (timeline immuable avec acteur/action/statuts avant-après), tableau de bord réception (bandeau KPI, filtres, onglets, split view), vue détaillée commande (chrono, contact, livraison, articles, paiement, journal), boutons acceptation et refus (UI + accessibilité clavier)
 - DEP-0601 à DEP-0640 — module admin catalogue V1 : vue admin catalogue, filtres catégorie/disponibilité/popularité/recherche, liste et création/édition produit, activation/désactivation, changement prix, stock et stock minimal, marquage populaire, validations API et stockage Prisma synchronisés avec le catalogue client
 - DEP-0641 à DEP-0680 — multi-tenant V1 : système de tenant complet avec store mémoire, middleware de résolution, routes API scoped par tenant, contexte React, sélecteurs UI pour admin/opérateur/livreur, compatibilité rétro avec tenant par défaut
+- DEP-0841 à DEP-0920 — sécurité V1 + rôles simples : 4 rôles (customer, store_operator, driver, admin), permissions par rôle, session mock sans OAuth, middleware auth API (extractSession, requireAuth, requireRole, requirePermission), routes auth (/auth/mock-login, /auth/session, /auth/logout), contexte auth React (useAuth avec Zustand), ProtectedRoute pour pages protégées, RoleBadge pour affichage rôles, stockage session localStorage, gardes d'accès côté API et front, erreurs 401/403 propres
 - DEP-0921 à DEP-1000 — cloud deployment V1 : fichiers .env.example (API/web), gestion variables environnement (env.ts), logger structuré JSON (logger.ts), middleware erreurs HTTP (http-errors.ts), endpoint /health pour monitoring, runtime-config.ts pour web, documentation complète (DEPLOY.md, ENVIRONMENTS.md, RUNBOOK.md), CI verte avec toutes corrections ESLint et TypeScript appliquées
 
 ## En cours
@@ -245,6 +246,26 @@ Ajouté dans cette PR :
 - `apps/web/src/components/driver/tenant-filter.tsx` — filtre tenant pour livreur
 - Pages admin, opérateur et livreur mises à jour avec sélection de tenant
 - Routes existantes conservées pour compatibilité rétro (tenant par défaut)
+
+## Sécurité V1 — DEP-0841 à DEP-0920
+
+Ajouté dans cette PR :
+- `packages/types/src/roles.ts` — 4 rôles (customer, store_operator, driver, admin) avec permissions
+- `packages/types/src/auth.ts` — types session, login, logout
+- `apps/api/src/lib/auth-store.ts` — store de sessions en mémoire avec Map
+- `apps/api/src/lib/auth-middleware.ts` — extractSession (depuis header Authorization) et requireAuth
+- `apps/api/src/lib/role-guards.ts` — requireRole, requirePermission, gardes prédéfinis
+- `apps/api/src/lib/session-mappers.ts` — mappers réponses auth
+- `apps/api/src/routes/auth.ts` — POST /auth/mock-login, GET /auth/session, POST /auth/logout
+- `apps/web/src/lib/auth-context.tsx` — Zustand store useAuth avec login/logout/checkSession
+- `apps/web/src/lib/auth-storage.ts` — stockage session localStorage
+- `apps/web/src/lib/role-guards.ts` — fonctions de vérification de permissions côté front
+- `apps/web/src/components/common/protected-route.tsx` — ProtectedRoute pour pages protégées
+- `apps/web/src/components/common/role-badge.tsx` — badge affichage rôle utilisateur
+- `apps/web/src/routes/mock-login-page.tsx` — page login mock pour démo/tests
+- Pages store-ops, driver, admin-catalog protégées par ProtectedRoute avec rôles requis
+- Middleware extractSession appliqué globalement dans app.ts
+- Mode démo/local complet sans OAuth ni provider externe
 
 ## Bloqueurs
 

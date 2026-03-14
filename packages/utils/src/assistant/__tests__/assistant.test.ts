@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import type { CatalogProduct } from '../../../../../../packages/types/src/assistant';
+import type { CatalogProduct } from '@depaneuria/types';
 
 import { matchCatalog } from '../catalog-match';
 import { normalize, extractKeywords } from '../normalize';
