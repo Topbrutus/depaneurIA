@@ -1,16 +1,17 @@
-import type {
-  Category,
-  CreateProductPayload,
-  Product,
-  ProductFilters,
-  UpdateProductPayload,
-} from '@depaneuria/types';
+import type { Category, CreateProductPayload, Product, ProductFilters, UpdateProductPayload } from '@depaneuria/types';
+import { getSessionId } from './auth-storage';
 
-const ADMIN_BASE = '/admin/catalog';
+const API_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const ADMIN_BASE = `${API_URL}/admin/catalog`;
 
 interface ApiResponse<T> {
-  success: boolean;
+  success: true;
   data: T;
+}
+
+interface ApiErrorResponse {
+  success: false;
+  error?: { message?: string; code?: string };
 }
 
 function buildQuery(filters: ProductFilters = {}) {
@@ -24,56 +25,69 @@ function buildQuery(filters: ProductFilters = {}) {
   return query ? `?${query}` : '';
 }
 
-async function handleResponse<T>(res: Response): Promise<T> {
-  if (!res.ok) {
-    const message = res.statusText || 'Requête échouée';
+function authHeaders(): HeadersInit {
+  const sessionId = getSessionId();
+  return sessionId ? { Authorization: `Bearer ${sessionId}` } : {};
+}
+
+async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+  const res = await fetch(`${ADMIN_BASE}${path}`, {
+    ...options,
+    headers: {
+      ...authHeaders(),
+      ...(options.headers ?? {}),
+    },
+  });
+
+  const contentType = res.headers.get('Content-Type') ?? '';
+  const isJson = contentType.includes('application/json');
+  const payload = isJson ? ((await res.json()) as ApiResponse<T> | ApiErrorResponse) : null;
+
+  if (!res.ok || !payload || payload.success === false) {
+    const message =
+      (payload && 'error' in payload && payload.error?.message) || res.statusText || 'Requête échouée';
     throw new Error(message);
   }
-  const json = (await res.json()) as ApiResponse<T>;
-  return json.data;
+
+  return payload.data;
 }
 
 export async function fetchCategories(): Promise<Category[]> {
-  const res = await fetch(`${ADMIN_BASE}/categories`);
-  return handleResponse<Category[]>(res);
+  return request<Category[]>('/categories');
 }
 
 export async function fetchProducts(filters?: ProductFilters): Promise<Product[]> {
-  const res = await fetch(`${ADMIN_BASE}/products${buildQuery(filters)}`);
-  return handleResponse<Product[]>(res);
+  return request<Product[]>(`/products${buildQuery(filters)}`);
 }
 
 export async function createProduct(payload: CreateProductPayload): Promise<Product> {
-  const res = await fetch(`${ADMIN_BASE}/products`, {
+  return request<Product>('/products', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  return handleResponse<Product>(res);
 }
 
 export async function updateProduct(
   productId: string,
   payload: UpdateProductPayload
 ): Promise<Product> {
-  const res = await fetch(`${ADMIN_BASE}/products/${productId}`, {
+  return request<Product>(`/products/${productId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });
-  return handleResponse<Product>(res);
 }
 
 export async function updateProductAvailability(
   productId: string,
   availability: Product['availability']
 ): Promise<Product> {
-  const res = await fetch(`${ADMIN_BASE}/products/${productId}/availability`, {
+  return request<Product>(`/products/${productId}/availability`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ availability }),
   });
-  return handleResponse<Product>(res);
 }
 
 export async function updateProductStock(
@@ -81,22 +95,20 @@ export async function updateProductStock(
   stock: number,
   minStock?: number
 ): Promise<Product> {
-  const res = await fetch(`${ADMIN_BASE}/products/${productId}/stock`, {
+  return request<Product>(`/products/${productId}/stock`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ stock, minStock }),
   });
-  return handleResponse<Product>(res);
 }
 
 export async function updateProductPopularity(
   productId: string,
   popular: boolean
 ): Promise<Product> {
-  const res = await fetch(`${ADMIN_BASE}/products/${productId}/popularity`, {
+  return request<Product>(`/products/${productId}/popularity`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ popular }),
   });
-  return handleResponse<Product>(res);
 }
