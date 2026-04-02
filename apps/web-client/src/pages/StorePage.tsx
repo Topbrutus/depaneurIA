@@ -1,3 +1,4 @@
+import { api } from '../lib/api'
 import AddProductModal from '../components/AddProductModal'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import type { Role, CartItem, Message } from '../types'
@@ -24,7 +25,22 @@ export default function StorePage({ role, onLogout }: Props) {
   const chatEnd = useRef<HTMLDivElement>(null)
 
   const currentRole = ROLES.find(r => r.id === role)!
-  const [localProducts, setLocalProducts] = useState([...PRODUCTS])
+  const [localProducts, setLocalProducts] = useState<typeof PRODUCTS>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
+
+  // Charger les produits depuis l'API au démarrage
+  useEffect(() => {
+    api.getProducts()
+      .then(products => {
+        setLocalProducts(products as any)
+        setLoadingProducts(false)
+      })
+      .catch(() => {
+        // Fallback sur les produits locaux si API indisponible
+        setLocalProducts([...PRODUCTS])
+        setLoadingProducts(false)
+      })
+  }, [])
   const filtered    = localProducts.filter(p => category === 'Tous' || p.category === category)
   const cartTotal   = cart.reduce((s, i) => s + i.price * i.qty, 0)
   const cartCount   = cart.reduce((s, i) => s + i.qty, 0)
@@ -147,11 +163,23 @@ N'inclus ce bloc QUE si une action panier est demandée.`
     setLoading(false)
   }
 
-  const handleAddProduct = (data: any) => {
-    const newId = Date.now()
-    const newProduct = { id: newId, name: data.name, price: data.price, category: data.category, stock: data.stock, emoji: data.emoji, image: data.imageData || '' }
-    if (data.imageData) localStorage.setItem('img-' + newId, data.imageData)
-    setLocalProducts(prev => [...prev, newProduct])
+  const handleAddProduct = async (data: any) => {
+    try {
+      const saved = await api.addProduct({
+        name: data.name,
+        price: data.price,
+        category: data.category,
+        stock: data.stock,
+        emoji: data.emoji,
+        image: data.imageData || '',
+      })
+      setLocalProducts(prev => [...prev, saved as any])
+    } catch {
+      // Fallback local si API indisponible
+      const newId = Date.now()
+      const newProduct = { id: newId, name: data.name, price: data.price, category: data.category, stock: data.stock, emoji: data.emoji, image: data.imageData || '' }
+      setLocalProducts(prev => [...prev, newProduct as any])
+    }
   }
 
   return (
@@ -225,11 +253,23 @@ N'inclus ce bloc QUE si une action panier est demandée.`
             {filtered.map(p => {
               const glow    = aiGlowing.has(p.id)
               const dragged = draggedId === p.id
-              const handleAddProduct = (data: any) => {
-    const newId = Date.now()
-    const newProduct = { id: newId, name: data.name, price: data.price, category: data.category, stock: data.stock, emoji: data.emoji, image: data.imageData || '' }
-    if (data.imageData) localStorage.setItem('img-' + newId, data.imageData)
-    setLocalProducts(prev => [...prev, newProduct])
+              const handleAddProduct = async (data: any) => {
+    try {
+      const saved = await api.addProduct({
+        name: data.name,
+        price: data.price,
+        category: data.category,
+        stock: data.stock,
+        emoji: data.emoji,
+        image: data.imageData || '',
+      })
+      setLocalProducts(prev => [...prev, saved as any])
+    } catch {
+      // Fallback local si API indisponible
+      const newId = Date.now()
+      const newProduct = { id: newId, name: data.name, price: data.price, category: data.category, stock: data.stock, emoji: data.emoji, image: data.imageData || '' }
+      setLocalProducts(prev => [...prev, newProduct as any])
+    }
   }
 
   return (
@@ -252,7 +292,7 @@ N'inclus ce bloc QUE si une action panier est demandée.`
                     boxShadow: glow ? '0 0 16px #f0a50044' : 'none',
                   }}
                 >
-                  <div style={{ fontSize: 22, marginBottom: 4 }}>{p.emoji}</div>
+                  {p.image ? <img src={p.image.startsWith('/') ? 'http://localhost:3001' + p.image : p.image} style={{width:'100%',height:'120px',objectFit:'contain',borderRadius:6,marginBottom:4,display:'block',padding:'8px',background:'#0d1a2d'}} onError={(e)=>{(e.target as HTMLImageElement).style.display='none'}} /> : null}<div style={{ fontSize: 56, height: '120px', display: p.image ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 }}>{p.emoji}</div>
                   <div style={{ fontSize: 10, fontWeight: 600, color: '#e2e8f0', lineHeight: 1.3 }}>{p.name}</div>
                   <div style={{ fontSize: 9, color: '#475569', marginTop: 2 }}>{p.category}</div>
                   <div style={{ fontSize: 12, fontWeight: 700, color: '#f0a500', marginTop: 5 }}>{p.price.toFixed(2)}$</div>
